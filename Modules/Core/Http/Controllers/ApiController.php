@@ -5,6 +5,7 @@ namespace Modules\Core\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Carbon\Carbon;
 
 class ApiController extends Controller
 {
@@ -22,7 +23,7 @@ class ApiController extends Controller
     {
         return \response()->json([
             'result'       => $code,
-            'current_time' => time(),
+            'current_time' => Carbon::now(),
             'message'      => $message,
             'data'         => !empty($data) ? $data : new \stdClass(),
             'error'        => !empty($error) ? $error : new \stdClass()

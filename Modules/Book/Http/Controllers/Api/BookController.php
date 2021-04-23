@@ -39,4 +39,25 @@ class BookController extends ApiController
             return $this->errorResponse([], $th->getMessage());
         }
     }
+
+    public function getBookDetail(Request $request)
+    {
+        try {
+            $id = $request->id;
+
+            if (empty($id)) {
+                return $this->errorResponse([], 'Invalid! Need id of the book.');
+            }
+
+            $bookItem = $this->book->getBookById($id);
+
+            if ($bookItem) {
+                return $this->successResponse(['result' => $bookItem], 'Response Successfully');
+            } else {
+                return $this->errorResponse([], 'None data!');
+            }
+        } catch (\Throwable $th) {
+            return $this->errorResponse([], $th->getMessage());
+        }
+    }
 }
