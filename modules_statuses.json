@@ -1,4 +1,5 @@
 {
     "Book": true,
-    "Core": true
+    "Core": true,
+    "Order": true
 }
