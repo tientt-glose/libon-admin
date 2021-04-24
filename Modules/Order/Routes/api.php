@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/order', function (Request $request) {
     return $request->user();
 });
+
+Route::namespace('Api')->group(function () {
+    Route::prefix('v1/order')->group(function () {
+        Route::post('/createBorrowOrder', 'OrderController@createBorrowOrder');
+    });
+});
