@@ -14,11 +14,10 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('admin-lte3/plugins/fontawesome-free/css/all.min.css') }}">
-
-    @yield('before-styles-end')
-
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('admin-lte3/dist/css/adminlte.min.css') }}">
+
+    @yield('before-styles-end')
 
     @yield('markdowns')
 </head>
@@ -54,7 +53,7 @@
     <!-- AdminLTE App -->
     <script src="{{ asset('admin-lte3/dist/js/adminlte.min.js') }}"></script>
 
-    @yield('scripts')
+    @yield('script')
     <!-- Optionally, you can add Slimscroll and FastClick plugins.
          Both of these plugins are recommended to enhance the
          user experience. -->

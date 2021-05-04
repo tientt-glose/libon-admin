@@ -11,6 +11,11 @@
 |
 */
 
-Route::prefix('book')->group(function() {
+Route::prefix('book')->group(function () {
     Route::get('/', 'BookController@index');
+});
+Route::middleware(['auth'])->group(function () {
+    Route::resource('categories', 'CategoryController', ['as' => 'book'])->only(['index', 'store']);
+    Route::post('categories/delete', 'CategoryController@deleteCategory')->name('book.categories.deleteCate');
+    Route::post('categories/update', 'CategoryController@editCategory')->name('book.categories.editCate');
 });
