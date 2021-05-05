@@ -24,6 +24,9 @@ class Book extends Model
         return $this->hasMany(TheBook::class);
     }
 
+    const BORROWABLE = 1;
+    const UNBORROWABLE = 0;
+
     public function categories()
     {
         return $this->belongsToMany(Category::class, 'book_category', 'book_id', 'category_id')->withTimestamps();
