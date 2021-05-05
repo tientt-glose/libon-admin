@@ -14,9 +14,14 @@
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="{{ asset('admin-lte3/plugins/fontawesome-free/css/all.min.css') }}">
+
+    <!-- Css of Plugin will add here before Theme style -->
+    @yield('before-adminLTE-styles-end')
+
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('admin-lte3/dist/css/adminlte.min.css') }}">
 
+    <!-- Custom css -->
     @yield('before-styles-end')
 
     @yield('markdowns')

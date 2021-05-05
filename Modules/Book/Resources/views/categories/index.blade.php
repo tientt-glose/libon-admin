@@ -1,11 +1,16 @@
 @extends('index')
 @section('title', 'Quản lý thể loại')
-@section ('before-styles-end')
+
+@section('before-adminLTE-styles-end')
 <!-- toastr -->
 <link rel="stylesheet" href="{{ asset('admin-lte3/plugins/toastr/toastr.min.css') }}">
+@endsection
+
+@section ('before-styles-end')
 <!-- custom -->
 <link rel="stylesheet" href="{{ asset('css/book.css') }}">
 @endsection
+
 @section('script')
 <!-- toastr -->
 <script src="{{ asset('admin-lte3/plugins/toastr/toastr.min.js') }}"></script>
@@ -61,7 +66,7 @@
 <!-- /.content-header -->
 
 <!-- Main content -->
-<div class="content">
+<section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -90,7 +95,7 @@
             </div>
         </div>
     </div>
-</div>
+</section>
 
 <div id="modal-add-category" class="modal fade">
     <div class="modal-dialog">
