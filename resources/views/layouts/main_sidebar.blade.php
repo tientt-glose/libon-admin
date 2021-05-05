@@ -51,9 +51,9 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('book.publishers.index') }}" class="nav-link">
                             <i class="fas fa-minus nav-icon"></i>
-                            <p>Inactive Page</p>
+                            <p>Quản lý Nhà xuất bản</p>
                         </a>
                     </li>
                 </ul>

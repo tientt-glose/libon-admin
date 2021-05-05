@@ -13,6 +13,11 @@ class Book extends Model
         return $this->belongsToMany(Category::class, 'book_category', 'book_id', 'category_id')->withTimestamps();
     }
 
+    public function publisher()
+    {
+        return $this->belongsTo(Publisher::class);
+    }
+
     public function getBookById($id)
     {
         return $this->where('id', $id)->first();

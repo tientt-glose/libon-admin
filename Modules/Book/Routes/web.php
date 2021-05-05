@@ -18,4 +18,8 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('categories', 'CategoryController', ['as' => 'book'])->only(['index', 'store']);
     Route::post('categories/delete', 'CategoryController@deleteCategory')->name('book.categories.deleteCate');
     Route::post('categories/update', 'CategoryController@editCategory')->name('book.categories.editCate');
+
+    Route::resource('publishers', 'PublisherController', ['as' => 'book'])->only(['index', 'store']);
+    Route::post('publishers/delete', 'PublisherController@deletePublisher')->name('book.publishers.deletePub');
+    Route::post('publishers/update', 'PublisherController@editPublisher')->name('book.publishers.editPub');
 });
