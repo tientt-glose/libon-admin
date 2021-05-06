@@ -1,3 +1,6 @@
+@php
+    $currentRouteName = \Request::route()->getName();
+@endphp
 <!-- Main Sidebar Container -->
 <!-- Brand Logo -->
 <a href="#" class="brand-link">
@@ -35,8 +38,8 @@
                     </li>
                 </ul>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">
+            <li class="nav-item menu-open">
+                <a href="#" class="nav-link active">
                     <i class="nav-icon fas fa-th"></i>
                     <p>
                         Quản lý sách
@@ -45,7 +48,7 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="{{ route('book.books.index') }}" class="nav-link ">
+                        <a href="{{ route('book.books.index') }}" class="nav-link @if($currentRouteName == 'book.books.index') active @endif">
                             <i class="fas fa-minus nav-icon"></i>
                             <p>Quản lý đầu sách</p>
                         </a>
