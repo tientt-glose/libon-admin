@@ -129,8 +129,8 @@
                 </div>
                 <form action="{{ route('book.publishers.editPub') }}" method="POST" name="form-edit-pub">
                     @csrf
-                    <input type="hidden" name="pub_id" id="pub_id" />
                     <div class="modal-body">
+                        <input type="hidden" name="pub_id" id="pub_id" />
                         <input class="form-control" type="text" id="pub_name" name="pub_name"
                             placeholder="Nhập tên Nhà xuất bản" required>
                     </div>

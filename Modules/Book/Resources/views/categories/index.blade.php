@@ -33,7 +33,6 @@
         $('.edit-cate').click(function(){
             var cate_id = $(this).data('id');
             var cate_name = $(this).data('name');
-
             $('#cate_id').val(cate_id);
             $('#cate_name').val(cate_name);
         });
@@ -128,8 +127,8 @@
                 </div>
                 <form action="{{ route('book.categories.editCate') }}" method="POST" name="form-edit-cate">
                     @csrf
-                    <input type="hidden" name="cate_id" id="cate_id" />
                     <div class="modal-body">
+                        <input type="hidden" name="cate_id" id="cate_id" />
                         <input class="form-control" type="text" id="cate_name" name="cate_name"
                             placeholder="Nhập tên thể loại" required>
                     </div>

@@ -146,7 +146,7 @@
                 <table class="table table-striped table-bordered table-hover projects" id="table-book">
                     <thead>
                         <tr>
-                            <th>Mã sách</th>
+                            <th>Mã đầu sách</th>
                             <th>Tên sách</th>
                             <th>Ảnh bìa</th>
                             <th>Nhà xuất bản</th>

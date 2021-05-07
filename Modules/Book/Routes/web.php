@@ -17,9 +17,12 @@ Route::prefix('book')->group(function () {
 Route::middleware(['web', 'auth'])->group(function () {
 
     Route::get('books/get', 'BookController@get')->name('book.books.get');
-
     Route::resource('books', 'BookController', ['as' => 'book'])->except(['show', 'destroy']);
     Route::get('books/delete/{id}', 'BookController@destroy')->name('book.books.destroy');
+
+    Route::get('books/the-books/get', 'TheBookController@get')->name('book.books.the-books.get');
+    Route::resource('books.the-books', 'TheBookController', ['as' => 'book'])->shallow()->except(['destroy']);
+    Route::get('the-books/delete/{id}', 'TheBookController@destroy')->name('book.the-books.destroy');
 
     Route::resource('categories', 'CategoryController', ['as' => 'book'])->only(['index', 'store']);
     Route::post('categories/delete', 'CategoryController@deleteCategory')->name('book.categories.deleteCate');

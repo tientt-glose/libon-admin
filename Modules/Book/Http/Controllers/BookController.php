@@ -14,18 +14,21 @@ use Modules\Book\Entities\Publisher;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Support\Renderable;
+use Modules\Book\Entities\TheBook;
 
 class BookController extends Controller
 {
     protected $book;
     protected $category;
     protected $publisher;
+    protected $theBook;
 
-    public function __construct(Book $book, Category $category, Publisher $publisher)
+    public function __construct(Book $book, Category $category, Publisher $publisher, TheBook $theBook)
     {
         $this->book = $book;
         $this->category = $category;
         $this->publisher = $publisher;
+        $this->theBook = $theBook;
     }
 
     /**
@@ -281,12 +284,12 @@ class BookController extends Controller
                 return redirect()->back()->withErrors('Xóa đầu sách không thành công');
             }
 
-            //todo: check về bảng the_book
-            //check count of book in this publisher, if count >1 -> error
-            // $countBook = $this->publisher->find($pub_id)->books()->count();
-            // if ($countBook > 0) {
-            //     return redirect()->back()->withErrors('Bạn không được phép xóa Nhà xuất bản đang có sách đính kèm');
-            // }
+            // check the book with book
+            $theBookExist = $this->book->checkStatusOfBook($id);
+            if ($theBookExist) {
+                return redirect()->back()->withErrors('Bạn không được phép xóa đầu sách đang có sách đính kèm');
+            }
+
             $book = $this->book->find($id);
             $book->categories()->detach();
 
