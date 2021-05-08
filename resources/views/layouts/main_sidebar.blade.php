@@ -15,7 +15,7 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
-            <li class="nav-item">
+            <li class="nav-item @if(strpos($currentRouteName, 'book.') === 0) menu-open @endif"">
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
@@ -25,20 +25,20 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="#" class="nav-link ">
+                        <a href="#" class="nav-link @if($currentRouteName == '') active @endif">
                             <i class="fas fa-minus nav-icon"></i>
                             <p>Active Page</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link @if($currentRouteName == '') active @endif">
                             <i class="fas fa-minus nav-icon"></i>
                             <p>Inactive Page</p>
                         </a>
                     </li>
                 </ul>
             </li>
-            <li class="nav-item menu-open">
+            <li class="nav-item  @if(strpos($currentRouteName, 'book.') === 0) menu-open @endif">
                 <a href="#" class="nav-link active">
                     <i class="nav-icon fas fa-th"></i>
                     <p>
@@ -54,13 +54,13 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('book.categories.index') }}" class="nav-link ">
+                        <a href="{{ route('book.categories.index') }}" class="nav-link @if($currentRouteName == 'book.categories.index') active @endif">
                             <i class="fas fa-minus nav-icon"></i>
                             <p>Quản lý thể loại sách</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="{{ route('book.publishers.index') }}" class="nav-link">
+                        <a href="{{ route('book.publishers.index') }}" class="nav-link @if($currentRouteName == 'book.publishers.index') active @endif">
                             <i class="fas fa-minus nav-icon"></i>
                             <p>Quản lý Nhà xuất bản</p>
                         </a>
