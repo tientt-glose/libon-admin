@@ -39,7 +39,7 @@
                 </ul>
             </li>
             <li class="nav-item  @if(strpos($currentRouteName, 'book.') === 0) menu-open @endif">
-                <a href="#" class="nav-link active">
+                <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-th"></i>
                     <p>
                         Quản lý sách
