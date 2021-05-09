@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            //todo
+            //todo admin
             $table->tinyInteger('admin');
             $table->string('id_card', 12);
             $table->string('fullname', 50);

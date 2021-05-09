@@ -36,7 +36,7 @@
     height: 36px;
 } */
 
-.image-product {
+.image-book {
     width: 90px;
 }
 
@@ -48,10 +48,4 @@
 .preview-image {
     max-width: 150px;
     margin: 10px 0 0 0;
-}
-
-.justify-content-between {
-    -webkit-justify-content: space-between !important;
-    -ms-flex-pack: justify !important;
-    justify-content: space-between !important;
 }

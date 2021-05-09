@@ -25,6 +25,16 @@ class TheBook extends Model
         return $this->where('book_id', $bookId)->count();
     }
 
+    public function getTheBookByBarcode($barcode)
+    {
+        return $this->with('book:id,name,author,pic_link')->where('barcode', $barcode)->first();
+    }
+
+    public function getStatusTheBookByBarcode($barcode)
+    {
+        return $this->select('status')->where('barcode', $barcode)->first();
+    }
+
     public function updateTheBook($id, $theBook)
     {
         return $this->where('id', $id)->update($theBook);

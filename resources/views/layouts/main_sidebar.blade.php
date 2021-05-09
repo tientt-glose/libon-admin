@@ -42,6 +42,23 @@
                 <a href="#" class="nav-link">
                     <i class="nav-icon fas fa-th"></i>
                     <p>
+                        Quản lý đơn
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('order.orders.index') }}" class="nav-link ">
+                            <i class="fas fa-minus nav-icon"></i>
+                            <p>Quản lý đơn mượn</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p>
                         Quản lý sách
                         <i class="right fas fa-angle-left"></i>
                     </p>
