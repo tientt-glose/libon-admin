@@ -369,7 +369,7 @@ class BookController extends Controller
                     $data = (array)$data;
                     $html = '';
                     if (!empty($data)) {
-                        $html .= '<img class="image-product" src="' . (($data[0] != null) ? url($data[0]) : "") . '">';
+                        $html .= '<img class="image-book" src="' . (($data[0] != null) ? url($data[0]) : "") . '">';
                     }
                     return $html;
                 } else {

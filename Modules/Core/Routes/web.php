@@ -19,5 +19,6 @@ Route::middleware(['web'])->group(function () {
     Route::middleware(['auth'])->group(function () {
         Route::get('/', 'DashboardController@index')->name('home');
         Route::get('/logout', 'AdminController@logout')->name('logout');
+        Route::get('/user/check', 'UserController@checkUserInfo')->name('user.check');
     });
 });

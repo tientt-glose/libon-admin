@@ -67,6 +67,12 @@ class Book extends Model
             'quantity' => $count
         ]);
     }
+    public function updateBorrowed($id, $count)
+    {
+        return $this->where('id', $id)->update([
+            'borrowed' => $count
+        ]);
+    }
 
     public function updateStatus($id, $status)
     {

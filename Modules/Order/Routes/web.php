@@ -11,6 +11,8 @@
 |
 */
 
-Route::prefix('order')->group(function() {
-    Route::get('/', 'OrderController@index');
+Route::middleware(['auth', 'web'])->group(function () {
+    Route::get('orders/get', 'OrderController@get')->name('order.orders.get');
+    Route::get('orders/add-the-book', 'OrderController@addTheBookToOrder')->name('order.orders.addTBook');
+    Route::resource('orders', 'OrderController', ['as' => 'order']);
 });

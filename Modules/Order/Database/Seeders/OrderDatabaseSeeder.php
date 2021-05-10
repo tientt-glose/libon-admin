@@ -3,7 +3,9 @@
 namespace Modules\Order\Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class OrderDatabaseSeeder extends Seeder
 {
@@ -14,8 +16,30 @@ class OrderDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
+        DB::table('orders')->insert(
+            [
+                'user_id' => '2',
+                'restore_deadline' => Carbon::now()->addDays(3),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
+        );
 
-        // $this->call("OthersTableSeeder");
+        DB::table('books_in_orders')->insert([
+            [
+                'order_id' => '1',
+                'the_book_id' => '23',
+                'book_id' => '15',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ],
+            [
+                'order_id' => '1',
+                'the_book_id' => '24',
+                'book_id' => '14',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now()
+            ]
+        ]);
     }
 }
