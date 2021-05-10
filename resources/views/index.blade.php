@@ -27,7 +27,7 @@
     @yield('markdowns')
 </head>
 
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed">
     <div class="wrapper">
 
         <!-- Header -->

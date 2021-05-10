@@ -16,6 +16,9 @@ class Order extends Model
     const OVERDUE = 4; //Qua han
     const RESTORED = 5; //Da tra
 
+    const DEFAULT_DEADLINE = 60; //60 ngay
+    const DEFAULT_QUANTITY = 8; //8 quyen
+
 
     public function user()
     {
@@ -33,7 +36,7 @@ class Order extends Model
                 $html .= '<span class="badge badge-info"><i class="fas fa-plus"></i>&nbsp;Tạo thành công</span>';
                 break;
             case self::BORROWING:
-                $html .= '<span class="badge badge-success"><i class="fa fa-refresh fa-spin"></i>&nbsp;Đang mượn</span>';
+                $html .= '<span class="badge badge-success"><i class="fas fa-sync-alt fa-spin"></i>&nbsp;&nbsp;Đang mượn</span>';
                 break;
             case self::DEADLINE_IS_COMMING:
                 $html .= '<span class="badge badge-warning"><i class="fas fa-clock"></i>&nbsp;Sắp tới hạn trả</span>';

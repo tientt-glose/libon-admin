@@ -25,6 +25,11 @@ class TheBook extends Model
         return $this->where('book_id', $bookId)->count();
     }
 
+    public function getTheBook($barcode)
+    {
+        return $this->where('barcode', $barcode)->first();
+    }
+
     public function getTheBookByBarcode($barcode)
     {
         return $this->with('book:id,name,author,pic_link')->where('barcode', $barcode)->first();
@@ -38,6 +43,13 @@ class TheBook extends Model
     public function updateTheBook($id, $theBook)
     {
         return $this->where('id', $id)->update($theBook);
+    }
+
+    public function updateStatusByBarcode($barcode, $status)
+    {
+        return $this->where('barcode', $barcode)->update([
+            'status' => $status
+        ]);
     }
 
     public function deleteTheBook($id)
