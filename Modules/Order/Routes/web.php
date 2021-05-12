@@ -14,5 +14,8 @@
 Route::middleware(['auth', 'web'])->group(function () {
     Route::get('orders/get', 'OrderController@get')->name('order.orders.get');
     Route::get('orders/add-the-book', 'OrderController@addTheBookToOrder')->name('order.orders.addTBook');
-    Route::resource('orders', 'OrderController', ['as' => 'order']);
+    Route::get('orders/input-the-book', 'OrderController@inputTheBook')->name('order.orders.inputTBook');
+    Route::put('orders/output/{id}', 'OrderController@updateOutput')->name('order.orders.updateOutput');
+    Route::get('orders/delete/{id}', 'OrderController@destroy')->name('order.orders.destroy');
+    Route::resource('orders', 'OrderController', ['as' => 'order'])->except('destroy');
 });

@@ -34,6 +34,11 @@ class Book extends Model
         return $this->belongsTo(Publisher::class);
     }
 
+    public function booksInOrders()
+    {
+        return $this->hasMany(BookInOrder::class);
+    }
+
     public function getBookById($id)
     {
         return $this->where('id', $id)->first();

@@ -62,6 +62,7 @@
                 }else{
                     $('#user_id').val(data.message.id)
                     $('#user_info ul').empty().append(
+                        '<li><b>Mã người dùng: </b>' + data.message.id + '</li>' +
                         '<li><b>Họ & Tên: </b>' + data.message.fullname + '</li>' +
                         '<li><b>Email: </b>' + data.message.email + '</li>' +
                         '<li><b>MSSV/MCB: </b>' + data.message.id_staff_student + '</li>' +
@@ -116,7 +117,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Thêm đầu sách</h1>
+                <h1 class="m-0">Thêm đơn mượn</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -170,7 +171,7 @@
                                 </div>
                                 <div class="col-md-6" id="user_info">
                                     <p> <b>Thông tin người đặt mượn: </b>
-                                        <p> </span>
+                                        <p>
                                             <ul>
                                             </ul>
                                 </div>

@@ -56,7 +56,7 @@ class PublisherController extends Controller
             $publisher = [
                 'name' => $pub_name
             ];
-            $this->publisher->updateOrCreate($publisher);
+            $this->publisher->insert($publisher);
             DB::commit();
             return redirect()->back()->with(['success' => 'Thêm Nhà xuất bản thành công']);
         } catch (\Throwable $th) {

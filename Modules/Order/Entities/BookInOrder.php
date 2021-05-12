@@ -2,6 +2,8 @@
 
 namespace Modules\Order\Entities;
 
+use Modules\Book\Entities\Book;
+use Modules\Book\Entities\TheBook;
 use Illuminate\Database\Eloquent\Model;
 
 class BookInOrder extends Model
@@ -22,5 +24,12 @@ class BookInOrder extends Model
     public function theBook()
     {
         return $this->belongsTo(TheBook::class);
+    }
+
+    public function inputBarcode($orderId, $bookId, $theBookId)
+    {
+        return $this->where('order_id', $orderId)->where('book_id', $bookId)->update([
+            'the_book_id' => $theBookId
+        ]);
     }
 }

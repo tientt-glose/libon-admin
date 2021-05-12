@@ -59,7 +59,7 @@ class CategoryController extends Controller
             $category = [
                 'name' => $cate_name
             ];
-            $this->category->updateOrCreate($category);
+            $this->category->insert($category);
             DB::commit();
             return redirect()->back()->with(['success' => 'Thêm thể loại thành công']);
         } catch (\Throwable $th) {

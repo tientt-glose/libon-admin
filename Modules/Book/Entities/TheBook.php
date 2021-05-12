@@ -3,6 +3,7 @@
 namespace Modules\Book\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Order\Entities\BookInOrder;
 
 class TheBook extends Model
 {
@@ -18,6 +19,11 @@ class TheBook extends Model
     public function book()
     {
         return $this->belongsTo(Book::class);
+    }
+
+    public function booksInOrders()
+    {
+        return $this->hasMany(BookInOrder::class);
     }
 
     public function countTheBookWithBookId($bookId)
@@ -38,6 +44,11 @@ class TheBook extends Model
     public function getStatusTheBookByBarcode($barcode)
     {
         return $this->select('status')->where('barcode', $barcode)->first();
+    }
+
+    public function getTheBookByBarcodeAndBookId($barcode, $bookId)
+    {
+        return $this->where('barcode', $barcode)->where('book_id', $bookId)->first();
     }
 
     public function updateTheBook($id, $theBook)

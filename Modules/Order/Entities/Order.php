@@ -19,10 +19,41 @@ class Order extends Model
     const DEFAULT_DEADLINE = 60; //60 ngay
     const DEFAULT_QUANTITY = 8; //8 quyen
 
+    public static function listStatus()
+    {
+        return array(
+            0 => 'Bị hủy',
+            1 => 'Tạo đơn mượn thành công',
+            2 => 'Đang mượn',
+            3 => 'Sắp tới hạn trả',
+            4 => 'Quá hạn',
+            5 => 'Đã trả'
+        );
+    }
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function booksInOrders()
+    {
+        return $this->hasMany(BookInOrder::class);
+    }
+
+    public function getOrderById($orderId)
+    {
+        return $this->where('id', $orderId)->first();
+    }
+
+    public function getOrderWithUserAndBookById($orderId)
+    {
+        return $this->where('id', $orderId)->with('user:id,id_card,fullname,id_staff_student,email', 'booksInOrders.theBook:id,barcode', 'booksInOrders.book:id,pic_link,name,author')->first();
+    }
+
+    public function updateOrder($id, $order)
+    {
+        return $this->where('id', $id)->update($order);
     }
 
     public static function genStatusHtml($status)
@@ -56,12 +87,9 @@ class Order extends Model
 
     public static function genColumnHtml($data)
     {
-        $message = "'Bạn có chắc chắn muốn xóa đầu sách này không?'";
         $column = "";
         if (!empty($data)) {
-            $column .= '<a href="' . route('book.books.the-books.index', $data->id) . '" class="btn btn-info btn-sm"><i class="fas fa-book" title="Danh sách các sách"></i></a>';
-            $column .= '<a href="' . route('book.books.edit', $data->id) . '" class="btn btn-primary btn-sm"><i class="fas fa-edit" title="Sửa đầu sách"></i></a>';
-            $column .= '<a href="' . route('book.books.destroy', $data->id) . '" onclick="return confirm(' . $message . ')" class="btn btn-danger btn-sm"><i class="fas fa-trash" title="Xóa đầu sách"></i></a>';
+            $column .= '<a href="' . route('order.orders.edit', $data->id) . '" class="btn btn-primary btn-sm"><i class="fas fa-edit" title="Sửa đơn mượn"></i></a>';
         }
         return $column;
     }
