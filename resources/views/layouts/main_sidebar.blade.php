@@ -6,7 +6,7 @@ $currentRouteName = \Request::route()->getName();
 <!-- Brand Logo -->
 <a href="{{ route('home') }}" class="brand-link">
     <img src="{{ asset("img/logo--mini.png") }}" alt="LibOn Logo" class="brand-image">
-    <span class="brand-text font-weight-light">LibOn</span>
+    <span class="brand-text font-weight-bolder" style="color: #d53d26">LibOn</span>
 </a>
 
 <!-- Sidebar -->
@@ -23,7 +23,6 @@ $currentRouteName = \Request::route()->getName();
                     <i class="nav-icon fas fa-tachometer-alt"></i>
                     <p>
                         Dashboard
-                        <i class="right fas fa-angle-left"></i>
                     </p>
                 </a>
             </li>

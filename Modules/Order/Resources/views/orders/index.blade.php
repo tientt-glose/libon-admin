@@ -7,6 +7,8 @@
 <!-- DataTables -->
 <link rel="stylesheet" href="{{ asset('admin-lte3/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
 <link rel="stylesheet" href="{{ asset('admin-lte3/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+<!-- daterange picker -->
+<link rel="stylesheet" href="{{ asset('admin-lte3/plugins/daterangepicker/daterangepicker.css') }}">
 <!-- toastr -->
 <link rel="stylesheet" href="{{ asset('admin-lte3/plugins/toastr/toastr.min.css') }}">
 @endsection
@@ -24,6 +26,10 @@
 <script src="{{ asset('admin-lte3/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('admin-lte3/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('admin-lte3/plugins/datatables-responsive/js/responsive.bootstrap4.min.js') }}"></script>
+<!-- moment -->
+<script src="{{ asset('admin-lte3/plugins/moment/moment.min.js') }}"></script>
+<!-- date-range-picker -->
+<script src="{{ asset('admin-lte3/plugins/daterangepicker/daterangepicker.js') }}"></script>
 <!-- toastr -->
 <script src="{{ asset('admin-lte3/plugins/toastr/toastr.min.js') }}"></script>
 
@@ -46,7 +52,8 @@
     //Initialize Select2 Elements
         $('.select2').select2({
             width: 'resolve',
-            dropdownParent: $('#category-select'),
+            allowClear: true
+            // dropdownParent: $('#category-select')
         })
     });
 </script>
@@ -59,12 +66,16 @@
             autoWidth: false,
             searching: false,
             responsive: true,
-            lengthMenu: [5, 10, 25, 50],
             ajax: {
                 url: '{{ route("order.orders.get") }}',
                 type: 'get',
                 data: function(d) {
-                    // d.category_id = $('#category option:selected').val();
+                    d.status = $('#status option:selected').val();
+                    d.created_at = $('#reservationtime').val()
+                    d.user_name = $('#user_name').val();
+                    d.order_id = $('#order_id').val();
+                    d.card = $('#card').val();
+                    d.code = $('#code').val();
                     d.csrf = '{{ csrf_field() }}';
                 }
             },
@@ -96,10 +107,44 @@
             columnDefs: [
             ]
         });
+    });
 
-        $('.filter-cate').change(function() {
-            table.draw();
-        });
+    function filter(){
+        table.draw()
+        // console.log(1)
+    }
+
+    $('#reset_button').click(function (params) {
+        $('#filter input').val('')
+        $('.select2').val(null).trigger('change');
+        filter()
+    })
+
+    $('#search_button').click(function (params) {
+        filter()
+    })
+
+    $('#reservationtime').daterangepicker({
+        showDropdowns: true,
+        timePicker: true,
+        timePicker24Hour: true,
+        timePickerIncrement: 1,
+        autoUpdateInput: false,
+        locale: {
+            format: 'DD/MM/YYYY HH:mm',
+            cancelLabel: 'Xóa',
+            applyLabel: 'Áp dụng'
+        }
+    })
+
+    $('input[name="created_at"]').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('DD/MM/YYYY HH:mm') + ' - ' + picker.endDate.format('DD/MM/YYYY HH:mm'))
+      filter()
+    });
+
+    $('input[name="created_at"]').on('cancel.daterangepicker', function(ev, picker) {
+      $(this).val('')
+      filter()
     });
 </script>
 @endsection
@@ -128,41 +173,110 @@
     <!-- Default box -->
     <div class="card card-primary card-outline">
         <div class="card-header">
+            <h3 class="card-title">Lọc đơn mượn</h3>
+        </div>
+        <div class="card-body p-2" id="filter">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Trạng thái đơn mượn:</label>
+                        <select class="form-control filter-status select2" style="width: 100%;" name="status"
+                            id="status" data-placeholder="Tất cả trạng thái" onchange="filter()">
+                            <option value="-1">Tất cả trạng thái</option>
+                            @foreach($listStatus as $key => $status)
+                            <option value="{{ $key }}">{{ $status }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label>Ngày tạo:</label>
+                        <div class="input-group">
+                            <input type="text" class="form-control float-left" id="reservationtime" name="created_at"
+                                value="" placeholder="Ngày tạo">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="far fa-clock"></i></span>
+                            </div>
+                        </div>
+                        <!-- /.input group -->
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="user_name">Tên người mượn:</label>
+                        <input type="text" class="form-control" id="user_name" name="user_name"
+                            placeholder="Tên người mượn" onchange="filter()">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="user_name">Mã đơn:</label>
+                        <input type="number" class="form-control" id="order_id" name="order_id" placeholder="Mã đơn"
+                            onchange="filter()">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="user_name">CMT/CCCD:</label>
+                        <input type="text" class="form-control" id="card" name="card"
+                            placeholder="Chứng minh thư, Căn cước công dân" onchange="filter()">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="user_name">MSSV/MCB:</label>
+                        <input type="text" class="form-control" id="code" name="code"
+                            placeholder="Mã số sinh viên, mã cán bộ" onchange="filter()">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label for="">Action:</label>
+                        <button type="button" class="btn btn-primary btn-block form-control" id="search_button"><i
+                                class="fas fa-search"></i>&nbsp;Tìm kiếm</button>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label style="visibility: hidden">A</label>
+                        <button type="button" class="btn btn-default btn-block form-control" id="reset_button"><i
+                                class="fas fa-times"></i>&nbsp;Reset</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-primary card-outline">
+        <div class="card-header">
             <a href="{{ route('order.orders.create') }}" class="btn btn-primary float-right">
                 Thêm đơn mượn</a>
-            {{-- <div class="filter float-right" id="category-select">
-                <select class="form-control filter-cate select2" style="width: 100%;" name="cate_id" id="category">
-                    <option value="">--Loại sách--</option>
-                    @foreach($categories as $cate)
-                    <option value="{{ $cate->id }}">{{ $cate->name }}</option>
-            @endforeach
-            </select>
-        </div> --}}
-    </div>
-    <div class="card-body p-2">
-        <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover projects" id="table-order">
-                <thead>
-                    <tr>
-                        <th>Mã đơn</th>
-                        <th>Người mượn</th>
-                        <th>CMT/CCCD</th>
-                        <th>MSSV/MCB</th>
-                        <th>Trạng thái</th>
-                        <th>Hạn trả</th>
-                        <th>Ngày tạo</th>
-                        <th>Ngày đến lấy</th>
-                        <th>Ngày trả</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
         </div>
-
-    </div>
-    <!-- /.card-body -->
+        <div class="card-body p-2">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover projects" id="table-order">
+                    <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Người mượn</th>
+                            <th>CMT/CCCD</th>
+                            <th>MSSV/MCB</th>
+                            <th>Trạng thái</th>
+                            <th>Hạn trả</th>
+                            <th>Ngày tạo</th>
+                            <th>Ngày đến lấy</th>
+                            <th>Ngày trả</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /.card-body -->
     </div>
     <!-- /.card -->
 </section>

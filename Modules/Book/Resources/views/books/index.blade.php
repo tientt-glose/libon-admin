@@ -59,7 +59,6 @@
             autoWidth: false,
             searching: false,
             responsive: true,
-            lengthMenu: [5, 10, 25, 50],
             ajax: {
                 url: '{{ route("book.books.get") }}',
                 type: 'get',

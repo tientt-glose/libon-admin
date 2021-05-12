@@ -89,7 +89,7 @@ class TheBookController extends Controller
                 array_push($listTheBook, $theBook);
             }
 
-            $this->theBook->insertOrIgnore($listTheBook);
+            $this->theBook->insert($listTheBook);
 
             $countTheBook = $this->theBook->countTheBookWithBookId($bookId);
             $this->book->updateQuantity($bookId, $countTheBook);
