@@ -19,6 +19,11 @@ class User extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function organization()
+    {
+        return $this->belongsTo(Organization::class);
+    }
+
     public function getUserByCard($userCard)
     {
         return $this->where('id_card', $userCard)->firstOrFail();
@@ -27,5 +32,20 @@ class User extends Model
     public function getUserByCode($userCode)
     {
         return $this->where('id_staff_student', $userCode)->firstOrFail();
+    }
+
+    public function getUserForAuth($email)
+    {
+        return $this->where('email', '=', $email)->select(['id', 'email', 'password', 'access_token', 'fullname'])->first();
+    }
+
+    public function getUserByAccessToken($accessToken)
+    {
+        return $this->where('access_token', $accessToken)->get();
+    }
+
+    public function updateUser($id, $params)
+    {
+        return $this->where('id', $id)->update($params);
     }
 }
