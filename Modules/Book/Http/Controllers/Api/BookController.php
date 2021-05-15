@@ -29,6 +29,17 @@ class BookController extends ApiController
         try {
             $listData = new stdClass();
             $listData->book = Book::select('*')->get();
+
+            foreach ($listData->book as $key => $value) {
+                if (!empty($value->pic_link)) {
+                    $img = json_decode($value->pic_link);
+                    $listData->book[$key]->pic1 = $img[0] ? url($img[0]) : null;
+                    $listData->book[$key]->pic2 = $img[1] ? url($img[1]) : null;
+                } else {
+                    $listData->book[$key]->pic1 = null;
+                    $listData->book[$key]->pic2 = null;
+                }
+            }
             if ($listData) {
                 return $this->successResponse(['result' => $listData], 'Response Successfully');
             } else {
@@ -52,6 +63,21 @@ class BookController extends ApiController
             $bookItem = $this->book->getBookById($id);
 
             if ($bookItem) {
+                if (!empty($bookItem->pic_link)) {
+                    $bookItem->pic_link = json_decode($bookItem->pic_link);
+
+                    $arr_path = (array) $bookItem->pic_link;
+                    $arr = array();
+                    foreach ($arr_path as $key => $path) {
+                        if ($path) {
+                            $arr[$key] = url($path);
+                        } else {
+                            $arr[$key] = null;
+                        }
+                    }
+
+                    $bookItem->pic_link = $arr;
+                }
                 return $this->successResponse(['result' => $bookItem], 'Response Successfully');
             } else {
                 return $this->errorResponse([], 'None data!');

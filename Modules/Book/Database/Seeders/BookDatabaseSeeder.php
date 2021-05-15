@@ -14,8 +14,6 @@ class BookDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-
-        // $this->call("OthersTableSeeder");
+        $this->call(CategoryDatabaseSeeder::class);
     }
 }

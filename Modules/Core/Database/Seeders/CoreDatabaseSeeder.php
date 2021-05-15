@@ -20,5 +20,6 @@ class CoreDatabaseSeeder extends Seeder
         $this->call(GroupSeeder::class);
         $this->call(AdminSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(OrganizationTableSeeder::class);
     }
 }
