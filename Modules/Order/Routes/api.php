@@ -20,5 +20,6 @@ Route::middleware('auth:api')->get('/order', function (Request $request) {
 Route::namespace('Api')->group(function () {
     Route::prefix('v1/order')->group(function () {
         Route::post('/createBorrowOrder', 'OrderController@createBorrowOrder');
+        Route::post('/', 'OrderController@index');
     });
 });

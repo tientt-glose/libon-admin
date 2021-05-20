@@ -44,6 +44,11 @@ class User extends Model
         return $this->where('access_token', $accessToken)->get();
     }
 
+    public function getUserWithOrder($userId)
+    {
+        return $this->where('id', $userId)->with('orders', 'orders.booksInOrders.book:id,name,author')->first();
+    }
+
     public function updateUser($id, $params)
     {
         return $this->where('id', $id)->update($params);
