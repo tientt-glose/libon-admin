@@ -51,6 +51,11 @@ class Order extends Model
         return $this->where('id', $orderId)->with('user:id,id_card,fullname,id_staff_student,email', 'booksInOrders.theBook:id,barcode', 'booksInOrders.book:id,pic_link,name,author')->first();
     }
 
+    public function getOrderWithBookByUserId($userId)
+    {
+        return $this->where('user_id', $userId)->with('booksInOrders.book:id,name,author')->get();
+    }
+
     public function updateOrder($id, $order)
     {
         return $this->where('id', $id)->update($order);

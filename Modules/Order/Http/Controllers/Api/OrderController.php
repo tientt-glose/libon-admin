@@ -2,61 +2,127 @@
 
 namespace Modules\Order\Http\Controllers\Api;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Modules\Order\Entities\Order;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
+
 use Illuminate\Support\Facades\Log;
+use Modules\Order\Entities\BookInOrder;
+
 use Illuminate\Support\Facades\Validator;
-
+use Modules\Core\Entities\User;
 use Modules\Core\Http\Controllers\ApiController;
-use Modules\Order\Entities\Order;
-
-use Carbon\Carbon;
+use stdClass;
 
 class OrderController extends ApiController
 {
     protected $order;
+    protected $bookInOrder;
+    protected $user;
 
-    public function __construct(Order $order)
+    public function __construct(Order $order, BookInOrder $bookInOrder, User $user)
     {
         $this->order = $order;
+        $this->bookInOrder = $bookInOrder;
+        $this->user = $user;
     }
 
     public function createBorrowOrder(Request $request)
     {
         DB::beginTransaction();
         try {
+            $result = new stdClass();
             $params = $request->all();
 
             $validatorArray = [
-                'book_id' => 'required',
-                'user_info' => 'required'
+                'books' => 'required',
+                'user_id'  => 'required',
             ];
             $messages = [
-                'book_id.required' => 'Miss id of the book',
-                'user_info.required' => 'Miss user information.'
+                'books.required' => 'Thiếu thông tin sách',
+                'user_id.required'  => 'Thiếu thông tin người mượn',
             ];
             $validator = Validator::make($params, $validatorArray, $messages);
             if ($validator->fails()) {
                 return $this->successResponse(["errors" => $validator->errors()], 'Response Successfully');
             }
 
-            $order = [];
-            $order['status'] = $this->order::BORROW_ORDER_CREATED_STATUS;
-            $order['book_id'] = $params['book_id'];
-            $order['user_info'] = $params['user_info'];
-            $order['created_at'] = Carbon::now();
-            $params['order_id'] = $this->order::insertGetId($order);
+            $order = [
+                'status' => $this->order::BORROW_ORDER_CREATED_STATUS,
+                'user_id' => $params['user_id'],
+                'created_at' => Carbon::now(),
+            ];
+
+            $orderId = $this->order::insertGetId($order);
+
+            //Them the book vao bang book in order
+            $listBookInOrder = [];
+
+            foreach ($params['books'] as $id => $value) {
+                $book = [
+                    'order_id' => $orderId,
+                    'book_id' => $id,
+                    'created_at' => Carbon::now()
+                ];
+                array_push($listBookInOrder, $book);
+            }
+
+            $this->bookInOrder->insert($listBookInOrder);
+
+            $result->quantity = count($params['books']);
+            $result->bookName = implode(', ', $params['books']);
+            $result->createdAt = Carbon::now();
+            $result->orderId = $orderId;
+            $result->success = 1;
 
             DB::commit();
-            return $this->successResponse(["success" => 1], 'Response Successfully');
-
+            return $this->successResponse($result, 'Response Successfully');
         } catch (\Throwable $th) {
             DB::rollBack();
-            // todo: how to xem log
-            Log::error('[Borrow Order] ' . $th->getMessage());
-            return $this->errorResponse([], $th->getMessage());
+            Log::error('[Borrow Order Client] ' . $th->getMessage());
+            return $this->successResponse(["errors" => $th->getMessage()], 'Response Successfully');
+        }
+    }
+
+    public function index(Request $request)
+    {
+        try {
+            $result = new stdClass();
+            $params = $request->all();
+
+            $validatorArray = [
+                'user_id'  => 'required',
+            ];
+            $messages = [
+                'user_id.required'  => 'Thiếu thông tin người mượn',
+            ];
+            $validator = Validator::make($params, $validatorArray, $messages);
+            if ($validator->fails()) {
+                return $this->successResponse(["errors" => $validator->errors()], 'Response Successfully');
+            }
+
+            $result->orders = $this->order->getOrderWithBookByUserId($request->user_id);
+            foreach ($result->orders as $order) {
+                $bookNameArray = [];
+                // dd($order);
+                foreach ($order->booksInOrders as $booksInOrder) {
+                    array_push($bookNameArray, $booksInOrder->book->name);
+                }
+                $bookName = implode(', ', $bookNameArray);
+                $order['book_name'] = $bookName;
+                $order['quantity'] = count($order->booksInOrders);
+                $order['restore_deadline'] = $order['restore_deadline'] ? date('d-m-Y', strtotime($order['restore_deadline'])) : null;
+                $order['pick_time'] = $order['pick_time'] ? date('d-m-Y H:i', strtotime($order['pick_time'])) : null;
+                $order['restore_time'] = $order['restore_time'] ? date('d-m-Y H:i', strtotime($order['restore_time'])) : null;
+                $order['created_at'] = $order['created_at'] ? date('d-m-Y H:i', strtotime($order['created_at'])) : null;
+            }
+            return $this->successResponse($result, 'Response Successfully');
+        } catch (\Throwable $th) {
+            Log::error('[Get Order List Client] ' . $th->getMessage());
+            return $this->successResponse(["errors" => $th->getMessage()], 'Response Successfully');
         }
     }
 }
