@@ -18,6 +18,8 @@
     <!-- icheck bootstrap -->
     <link rel="stylesheet" href="{{ asset('admin-lte3/plugins/icheck-bootstrap/icheck-bootstrap.min.css') }}">
 
+    @yield('before-theme-styles-end')
+
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('admin-lte3/dist/css/adminlte.min.css') }}">
 

@@ -1,6 +1,35 @@
 @extends('index')
 @section('title', 'Trang chủ')
 
+@section('before-adminLTE-styles-end')
+<!-- toastr -->
+<link rel="stylesheet" href="{{ asset('admin-lte3/plugins/toastr/toastr.min.css') }}">
+@endsection
+
+{{-- @section ('before-styles-end')
+<!-- custom -->
+<link rel="stylesheet" href="{{ asset('css/detail.css') }}">
+@endsection --}}
+
+@section('script')
+<!-- toastr -->
+<script src="{{ asset('admin-lte3/plugins/toastr/toastr.min.js') }}"></script>
+
+@if($errors->any())
+@foreach ($errors->all() as $error)
+<script>
+    toastr.error('{{ $error }}')
+</script>
+@endforeach
+@endif
+
+@if (session()->has('success'))
+<script>
+    toastr.success('{{ session()->get('success') }}')
+</script>
+@endif
+@endsection
+
 @section ('before-styles-end')
 <!-- custom -->
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
@@ -36,7 +65,7 @@
                             PickupBook với quy trình đặt mượn sách dễ dàng, nhanh chóng, hiện đại sẽ giải quyết vấn đề
                             của bạn.
                         </p>
-                        <a href="#" class="btn btn-default btn-orange">Go to LibOn</a>
+                        <a href="http://libon-vn.tk/" target="_blank" class="btn btn-default btn-orange">Go to LibOn</a>
                     </div>
                 </div><!-- /.card -->
             </div>

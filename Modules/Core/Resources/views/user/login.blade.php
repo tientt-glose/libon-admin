@@ -1,19 +1,49 @@
 @extends('layouts.login_index')
 @section('title', 'Đăng nhập')
+
+@section('before-theme-styles-end')
+<!-- toastr -->
+<link rel="stylesheet" href="{{ asset('admin-lte3/plugins/toastr/toastr.min.css') }}">
+@endsection
+
+{{-- @section ('before-styles-end')
+<!-- custom -->
+<link rel="stylesheet" href="{{ asset('css/detail.css') }}">
+@endsection --}}
+
+@section('scripts')
+<!-- toastr -->
+<script src="{{ asset('admin-lte3/plugins/toastr/toastr.min.js') }}"></script>
+
+@if($errors->any())
+@foreach ($errors->all() as $error)
+<script>
+    toastr.error('{{ $error }}')
+</script>
+@endforeach
+@endif
+
+@if (session()->has('success'))
+<script>
+    toastr.success('{{ session()->get('success') }}')
+</script>
+@endif
+@endsection
+
 @section('content')
 <div class="login-logo">
     <img src="{{ asset("img/logo.png") }}" alt="LibOn Logo" class="login-image">
 </div>
 
-<div class="alert alert-danger alert-dismissible">
+{{-- <div class="alert alert-danger alert-dismissible">
     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
     <h5><i class="icon fas fa-ban"></i> Lỗi!</h5>
     @if ($errors->any())
     @foreach($errors->all() as $error)
-    {{ $error }} <br>
-    @endforeach
-    @endif
-</div>
+        {{ $error }} <br>
+@endforeach
+@endif
+</div> --}}
 
 <div class="card">
     <div class="card-body login-card-body">
