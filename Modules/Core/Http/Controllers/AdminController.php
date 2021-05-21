@@ -17,10 +17,9 @@ class AdminController extends Controller
 
     public function login()
     {
-        if(Auth::check()) {
+        if (Auth::check()) {
             return redirect()->route('home');
-        }
-        else {
+        } else {
             return view('core::user.login');
         }
     }
@@ -28,7 +27,7 @@ class AdminController extends Controller
     public function loginPost(LoginRequest $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password, 'admin' => 1], $request->remember_me)) {
-            return redirect()->route('home');
+            return redirect()->route('home')->with(['success' => 'Đăng nhập thành công']);
         } else {
             return redirect()->back()->withInput()->withErrors('Tài khoản hoặc mật khẩu không hợp lệ');
         }
@@ -37,6 +36,6 @@ class AdminController extends Controller
     public function logout()
     {
         Auth::logout();
-        return redirect()->route('login');
+        return redirect()->route('login')->with(['success' => 'Đăng xuất thành công']);
     }
 }
