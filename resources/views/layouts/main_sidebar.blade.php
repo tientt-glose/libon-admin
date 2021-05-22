@@ -76,6 +76,24 @@ $currentRouteName = \Request::route()->getName();
                     </li>
                 </ul>
             </li>
+            <li class="nav-item @if(strpos($currentRouteName, 'user.') === 0) menu-open @endif">
+                <a href="#" class="nav-link @if(strpos($currentRouteName, 'user.') === 0) active @endif">
+                    <i class="nav-icon fas fa-book"></i>
+                    <p>
+                        Quản lý người dùng
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('user.index') }}"
+                            class="nav-link @if($currentRouteName == 'user.index') active @endif">
+                            <i class="fas fa-minus nav-icon"></i>
+                            <p>Danh sách người dùng</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </nav>
     <!-- /.sidebar-menu -->

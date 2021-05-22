@@ -20,5 +20,13 @@ Route::middleware(['web'])->group(function () {
         Route::get('/', 'DashboardController@index')->name('home');
         Route::get('/logout', 'AdminController@logout')->name('logout');
         Route::get('/user/check', 'UserController@checkUserInfo')->name('user.check');
+
+        Route::get('/users', 'UserController@index')->name('user.index');
+        Route::get('/users/get', 'UserController@get')->name('user.get');
+        Route::get('/users/edit/{id}', 'UserController@edit')->name('user.edit');
+        Route::post('/users/update/{id}', 'UserController@update')->name('user.update');
+        Route::get('/users/create', 'UserController@create')->name('user.create');
+        Route::post('/users/store', 'UserController@store')->name('user.store');
+        Route::get('/users/delete/{id}', 'UserController@destroy')->name('user.destroy');
     });
 });
