@@ -16,15 +16,11 @@
 @section('script')
 <!-- Select2 -->
 <script src="{{ asset('admin-lte3/plugins/select2/js/select2.full.min.js') }}"></script>
-<!-- bs-custom-file-input -->
-<script src="{{ asset('admin-lte3/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 <!-- jquery-validation -->
 <script src="{{ asset('admin-lte3/plugins/jquery-validation/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('admin-lte3/plugins/jquery-validation/additional-methods.min.js') }}"></script>
 <!-- toastr -->
 <script src="{{ asset('admin-lte3/plugins/toastr/toastr.min.js') }}"></script>
-<!-- custom -->
-<script src="{{ asset('js/book-edit.js') }}"></script>
 
 @if($errors->any())
 @foreach ($errors->all() as $error)
@@ -68,93 +64,97 @@
             id="validateForm">
             @csrf
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Thông tin user</h3>
+                            <h3 class="card-title">Phần nhập thông tin user</h3>
                         </div>
                         <!-- /.card-header -->
+
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="fullname">Họ tên</label>
-                                <input type="text" class="form-control" id="fullname" name="fullname"
-                                    value="{{ $user->fullname }}" placeholder="Nhập vào tên người dùng">
-                            </div>
-                            <div class="form-group">
-                                <label for="id_card">ID Card</label>
-                                <input type="number" class="form-control" id="id_card" name="id_card"
-                                    value="{{ $user->id_card }}" placeholder="Nhập vào mã thẻ thư viện">
-                            </div>
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" name="email"
-                                    value="{{ $user->email }}" placeholder="Nhập vào email">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" name="password"
-                                    placeholder="Nhập vào password mới">
-                            </div>
-                            <div class="form-group">
-                                <label for="dob">Ngày sinh</label>
-                                <input type="date" class="form-control" id="dob" name="dob"
-                                value="{{ $user->dob }}" placeholder="Nhập vào ngày sinh">
-                            </div>
-                            <div class="form-group">
-                                <label for="career">Giới tính</label>
-                                <select class="form-control" id="career" name="career"
-                                    data-placeholder="Chọn nghề nghiệp" style="width: 100%;">
-                                    <option value="1" @if ($user->career == 1) selected @endif>Sinh viên</option>
-                                    <option value="2" @if ($user->career == 2) selected @endif>Giáo viên</option>
-                                    <option value="3" @if ($user->career == 3) selected @endif>Chuyên viên</option>
-                                    <option value="4" @if ($user->career == 4) selected @endif>Khác</option>
-                                </select>
-                            </div>
-                        </div>
-                        <!-- /.card-body -->
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card card-primary card-outline">
-                        <div class="card-header">
-                            <h3 class="card-title">Thông tin user</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <div class="card-body">
-                            <div class="form-group" id="gender-select">
-                                <label for="gender">Giới tính</label>
-                                <select class="form-control selectGender" id="gender" name="gender"
-                                    data-placeholder="Chọn giới tính" style="width: 100%;">
-                                    <option value="0" @if ($user->gender == 0) selected @endif>Nam</option>
-                                    <option value="1" @if ($user->gender == 1) selected @endif>Nữ</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="phone">Số điện thoại</label>
-                                <input type="tel" class="form-control" id="phone" name="phone"
-                                value="{{ $user->phone }}" placeholder="Nhập vào số điện thoại">
-                            </div>
-                            <div class="form-group">
-                                <label for="organization">Cơ quan</label>
-                                <select class="form-control" id="organization" name="organization_id"
-                                    data-placeholder="Chọn cơ quan" style="width: 100%;">
-                                    @foreach ($organization as $organizationItem)
-                                        <option value="{{$organizationItem->id}}" @if ($user->organization_id == $organizationItem->id) selected @endif>{{$organizationItem->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="id_staff_student">Thẻ CCCD/SV</label>
-                                <input type="number" class="form-control" id="id_staff_student" name="id_staff_student"
-                                value="{{ $user->id_staff_student }}" placeholder="Nhập vào số thẻ">
-                            </div>
-                            <div class="form-group">
-                                <label for="admin">Là Admin</label>
-                                <select class="form-control" id="admin" name="admin"
-                                    data-placeholder="Chọn loại người dùng" style="width: 100%;">
-                                    <option value="0" @if ($user->admin == 0) selected @endif>Người dùng</option>
-                                    <option value="1" @if ($user->admin == 1) selected @endif>Admin</option>
-                                </select>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="fullname">Họ tên</label>
+                                        <input type="text" class="form-control" id="fullname" name="fullname"
+                                            value="{{ $user->fullname }}" placeholder="Nhập vào tên người dùng">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_card">Số CMT/CCCD</label>
+                                        <input type="number" class="form-control" id="id_card" name="id_card"
+                                            value="{{ $user->id_card }}"
+                                            placeholder="Nhập vào số chứng minh thư, căn cước công dân">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Địa chỉ email</label>
+                                        <input type="email" class="form-control" id="email" name="email"
+                                            value="{{ $user->email }}" placeholder="Nhập vào email">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Mật khẩu</label>
+                                        <input type="password" class="form-control" id="password" name="password"
+                                            placeholder="Nhập vào mật khẩu mới">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dob">Ngày sinh</label>
+                                        <input type="date" class="form-control" id="dob" name="dob"
+                                            value="{{ $user->dob }}" placeholder="Nhập vào ngày sinh">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="career">Nghề nghiệp</label>
+                                        <select class="form-control" id="career" name="career"
+                                            data-placeholder="Chọn nghề nghiệp" style="width: 100%;">
+                                            <option value="1" @if ($user->career == 1) selected @endif>Sinh viên
+                                            </option>
+                                            <option value="2" @if ($user->career == 2) selected @endif>Giáo viên
+                                            </option>
+                                            <option value="3" @if ($user->career == 3) selected @endif>Chuyên viên
+                                            </option>
+                                            <option value="4" @if ($user->career == 4) selected @endif>Khác</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group" id="gender-select">
+                                        <label for="gender">Giới tính</label>
+                                        <select class="form-control selectGender" id="gender" name="gender"
+                                            data-placeholder="Chọn giới tính" style="width: 100%;">
+                                            <option value="0" @if ($user->gender == 0) selected @endif>Nam</option>
+                                            <option value="1" @if ($user->gender == 1) selected @endif>Nữ</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="phone">Số điện thoại</label>
+                                        <input type="tel" class="form-control" id="phone" name="phone"
+                                            value="{{ $user->phone }}" placeholder="Nhập vào số điện thoại">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="organization">Cơ quan</label>
+                                        <select class="form-control" id="organization" name="organization_id"
+                                            data-placeholder="Chọn cơ quan" style="width: 100%;">
+                                            @foreach ($organization as $organizationItem)
+                                            <option value="{{$organizationItem->id}}" @if ($user->organization_id ==
+                                                $organizationItem->id) selected @endif>{{$organizationItem->name}}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="id_staff_student">Mã thẻ sinh viên/mã cán bộ</label>
+                                        <input type="number" class="form-control" id="id_staff_student"
+                                            name="id_staff_student" value="{{ $user->id_staff_student }}"
+                                            placeholder="Nhập vào mã số vinh viên, mã cán bộ">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="admin">Là Admin</label>
+                                        <select class="form-control" id="admin" name="admin"
+                                            data-placeholder="Chọn loại người dùng" style="width: 100%;">
+                                            <option value="0" @if ($user->admin == 0) selected @endif>Người dùng
+                                            </option>
+                                            <option value="1" @if ($user->admin == 1) selected @endif>Admin</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <!-- /.card-body -->
@@ -164,7 +164,7 @@
                     <div class="card card-primary card-outline">
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">Lưu</button>
-                            <button type="button" class="btn btn-default float-right">Hủy</button>
+                            <a href="{{ route('user.index') }}" class="btn btn-default float-right">Hủy</a>
                         </div>
                     </div>
                 </div>
