@@ -70,7 +70,7 @@ class User extends Model
         $column = "";
         if (!empty($data)) {
             $column .= '<a href="' . route('user.edit', $data->id) . '" class="btn btn-primary btn-sm"><i class="fas fa-edit" title="Sửa người dùng"></i></a>';
-            if($data->admin != 1) {
+            if($data->admin != 1 && empty(count($data->orders))) {
                 $column .= '<a href="' . route('user.destroy', $data->id) . '" onclick="return confirm(' . $message . ')" class="btn btn-danger btn-sm"><i class="fas fa-trash" title="Xóa người dùng"></i></a>';
             }
 

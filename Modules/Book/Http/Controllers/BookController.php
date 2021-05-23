@@ -325,6 +325,10 @@ class BookController extends Controller
                                 $q->where('category_id', $value);
                             });
                         }
+                        if ($key == 'search') {
+                            $search = $value['value'];
+                            $query->where('name','LIKE', "%$search%")->orWhere('content_summary','LIKE', "%$search%")->orWhere('author','LIKE', "%$search%");
+                        }
                     }
                 }
             })
