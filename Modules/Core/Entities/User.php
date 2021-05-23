@@ -49,8 +49,33 @@ class User extends Model
         return $this->where('id', $userId)->with('orders', 'orders.booksInOrders.book:id,name,author')->first();
     }
 
+    public function getUserById($id)
+    {
+        return $this->where('id', $id)->with('organization')->first();
+    }
+
     public function updateUser($id, $params)
     {
         return $this->where('id', $id)->update($params);
     }
+
+    public function deleteUser($id)
+    {
+        return $this->where('id', $id)->delete();
+    }
+
+    public static function genColumnHtml($data)
+    {
+        $message = "'Bạn có chắc chắn muốn xóa người dùng này không?'";
+        $column = "";
+        if (!empty($data)) {
+            $column .= '<a href="' . route('user.edit', $data->id) . '" class="btn btn-primary btn-sm"><i class="fas fa-edit" title="Sửa người dùng"></i></a>';
+            if($data->admin != 1) {
+                $column .= '<a href="' . route('user.destroy', $data->id) . '" onclick="return confirm(' . $message . ')" class="btn btn-danger btn-sm"><i class="fas fa-trash" title="Xóa người dùng"></i></a>';
+            }
+
+        }
+        return $column;
+    }
+
 }
