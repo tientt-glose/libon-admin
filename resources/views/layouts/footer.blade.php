@@ -4,4 +4,5 @@
     TienTT❣️
 </div>
 <!-- Default to the left -->
-<strong>Copyright &copy; 2021 <a href="#" style="color: #d53d26">LibOn</a>.</strong> All rights reserved.
+<strong>Copyright &copy; 2021 <a href="http://libon-vn.tk/" style="color: #d53d26">LibOn</a>.</strong> All rights
+reserved.

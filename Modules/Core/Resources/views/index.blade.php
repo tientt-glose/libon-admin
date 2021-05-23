@@ -89,7 +89,7 @@
                     <div class="card-body">
                         <h6 class="card-title font-weight-bold">Quản lý người dùng</h6>
                         <p class="card-text"> Quản lý người dùng hiện có trên hệ thống kèm thao tác phân quyền</p>
-                        <a href="{{ route('book.books.index') }}" class="btn btn-primary">Chuyển tới</a>
+                        <a href="{{ route('user.index') }}" class="btn btn-primary">Chuyển tới</a>
                     </div>
                 </div>
             </div>

@@ -217,7 +217,7 @@
                     <div class="card card-primary card-outline">
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">Lưu</button>
-                            <button type="button" class="btn btn-default float-right">Hủy</button>
+                            <a href="{{ route('book.books.index') }}" class="btn btn-default float-right">Hủy</a>
                         </div>
                     </div>
                 </div>

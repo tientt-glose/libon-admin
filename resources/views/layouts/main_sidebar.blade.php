@@ -78,7 +78,7 @@ $currentRouteName = \Request::route()->getName();
             </li>
             <li class="nav-item @if(strpos($currentRouteName, 'user.') === 0) menu-open @endif">
                 <a href="#" class="nav-link @if(strpos($currentRouteName, 'user.') === 0) active @endif">
-                    <i class="nav-icon fas fa-book"></i>
+                    <i class="nav-icon fas fa-users"></i>
                     <p>
                         Quản lý người dùng
                         <i class="right fas fa-angle-left"></i>

@@ -64,7 +64,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            searching: false,
+            searching: true,
             responsive: true,
             ajax: {
                 url: '{{ route("order.orders.get") }}',
@@ -98,6 +98,7 @@
                 infoEmpty: 'Không có dữ liệu',
                 infoFiltered: '(lọc từ tổng số _MAX_ bản ghi)',
                 info: 'Hiển thị từ _START_ đến _END_ trong tổng số _TOTAL_ kết quả',
+                search: 'Tìm kiếm:',
                 paginate: {
                     previous:   '«',
                     next:       '»'
