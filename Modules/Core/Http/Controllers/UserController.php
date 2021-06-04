@@ -58,7 +58,7 @@ class UserController extends Controller
     }
     public function get()
     {
-        return Datatables::of(User::query())
+        return Datatables::of(User::select('*')->with('orders')->get())
             ->escapeColumns([])
             ->addColumn('actions', function ($user) {
                 $html = $this->user->genColumnHtml($user);
@@ -138,6 +138,38 @@ class UserController extends Controller
             $params = $request->all();
             unset($params['password']);
             unset($params['_token']);
+
+            $validatorArray = [
+                'fullname' => 'required',
+                'id_card' => 'required',
+                'email' => 'required',
+                'password' => 'min:6',
+                'dob' => 'required',
+                'career' => 'required',
+                'gender' => 'required',
+                'phone' => 'required',
+                'organization_id' => 'required',
+                'id_staff_student' => 'required',
+                'admin' => 'required',
+            ];
+            $messages = [
+                'fullname.required' => 'Thiếu họ tên',
+                'id_card.required' => 'Thiếu mã thẻ mượn sách',
+                'email.required' => 'Thiếu địa chỉ email',
+                'password.min' => 'Mật khẩu quá ngắn',
+                'dob.required' => 'Thiếu ngày tháng năm sinh',
+                'career.required' => 'Thiếu công việc hiện tại',
+                'gender.required' => 'Thiếu giới tính',
+                'phone.required' => 'Thiếu số điện thoại',
+                'organization_id.required' => 'Thiếu doanh nghiệp',
+                'id_staff_student.required' => 'Thiếu mã thẻ CCCD/SV',
+                'admin.required' => 'Thiếu lựa chọn có phải admin không',
+            ];
+            $validator = Validator::make($params, $validatorArray, $messages);
+            if ($validator->fails()) {
+                return redirect()->back()->withInput()->withErrors($validator->errors());
+            }
+
             if(!empty($request->password)) {
                 $params['password'] = Hash::make($request->password);
             }
