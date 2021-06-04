@@ -64,7 +64,7 @@
             processing: true,
             serverSide: true,
             autoWidth: false,
-            searching: true,
+            searching: false,
             responsive: true,
             ajax: {
                 url: '{{ route("order.orders.get") }}',

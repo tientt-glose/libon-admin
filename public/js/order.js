@@ -38,6 +38,9 @@ function formValidate() {
             "barcode[]": {
                 duplicate_barcode: true,
             },
+            "address": {
+                required: true
+            }
         },
         messages: {
             "user_id": {
@@ -53,6 +56,11 @@ function formValidate() {
             "barcode[]": {
                 duplicate_barcode: function () {
                     toastr.error('Trong đơn có trường hợp mã sách giống nhau')
+                }
+            },
+            "address": {
+                required: function () {
+                    toastr.error('Vui lòng nhập địa chỉ nhận sách')
                 }
             }
         },

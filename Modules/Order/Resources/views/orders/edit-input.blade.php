@@ -69,12 +69,35 @@
                     })
                     if (data.errorMess) {
                         toastr.error(data.errorMess)
+                    } else {
+                        toastr.success('Nhập sách thành công')
                     }
                     $('#barcode_add').val('')
                 }
             }
         })
     })
+</script>
+
+<script>
+    var $backupAddress = $('#address').val()
+    $('#delivery').change(function() {
+        if ($('#delivery option:selected').val() == 2 && document.getElementById('address').hasAttribute('disabled')) {
+            $('#address').removeAttr('disabled');
+            $('#address').attr('placeholder', 'Nhập địa chỉ nhận sách');
+            $('#address').val($backupAddress);
+        }
+
+        if ($('#delivery option:selected').val() == 1 && !document.getElementById('address').hasAttribute('disabled')) {
+            // $('#address').attr('disabled', true);
+            $backupAddress = $('#address').val();
+            $('#address').val('');
+            $('#address').attr({
+                'placeholder': 'Không khả dụng',
+                'disabled' : true,
+            });
+        }
+    });
 </script>
 @endsection
 
@@ -278,6 +301,36 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <h3 class="card-title">Phần sửa thông tin hình thức lấy sách</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Hình thức lấy sách</label>
+                                        <select class="form-control" aria-placeholder="Lựa chọn hình thức lấy sách"
+                                            id="delivery" name="delivery">
+                                            <option value="1" {{ $query->delivery == 1 ? 'selected' : null }}>Tự đến lấy
+                                            </option>
+                                            <option value="2" {{ $query->delivery == 2 ? 'selected' : null }}>Sử dụng
+                                                đơn vị vận chuyển</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Địa chỉ nhận sách</label>
+                                        <input class="form-control" type="text" id="address" name="address"
+                                            placeholder="{{ $query->delivery == 2 ? 'Nhập địa chỉ nhận sách' : 'Không khả dụng' }}"
+                                            value="{{ $query->address }}" {{ $query->delivery == 2 ? '' : 'disabled' }}
+                                            required>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">Lưu</button>

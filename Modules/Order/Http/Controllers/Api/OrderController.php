@@ -2,20 +2,21 @@
 
 namespace Modules\Order\Http\Controllers\Api;
 
+use stdClass;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
+use Modules\Core\Entities\User;
+
 use Modules\Order\Entities\Order;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\DB;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Modules\Order\Entities\BookInOrder;
-
 use Illuminate\Support\Facades\Validator;
-use Modules\Core\Entities\User;
 use Modules\Core\Http\Controllers\ApiController;
-use stdClass;
 
 class OrderController extends ApiController
 {
@@ -40,10 +41,14 @@ class OrderController extends ApiController
             $validatorArray = [
                 'books' => 'required',
                 'user_id'  => 'required',
+                'delivery' => 'integer',
+                'address' => Rule::requiredIf($params['delivery'] == $this->order::SHIPPING)
             ];
             $messages = [
                 'books.required' => 'Thiếu thông tin sách',
                 'user_id.required'  => 'Thiếu thông tin người mượn',
+                'delivery.integer' => 'Thiếu dữ liệu hình thức lấy sách',
+                'address.required' => 'Thiếu địa chỉ nhận sách'
             ];
             $validator = Validator::make($params, $validatorArray, $messages);
             if ($validator->fails()) {
@@ -54,6 +59,8 @@ class OrderController extends ApiController
                 'status' => $this->order::BORROW_ORDER_CREATED_STATUS,
                 'user_id' => $params['user_id'],
                 'created_at' => Carbon::now(),
+                'delivery' => $params['delivery'],
+                'address' => array_key_exists('address', $params) ? $params['address'] : null
             ];
 
             $orderId = $this->order::insertGetId($order);
@@ -74,7 +81,9 @@ class OrderController extends ApiController
 
             $result->quantity = count($params['books']);
             $result->bookName = implode(', ', $params['books']);
-            $result->createdAt = Carbon::now();
+            $result->createdAt = $order['created_at'];
+            $result->delivery = $order['delivery'];
+            $result->address = $order['address'];
             $result->orderId = $orderId;
             $result->success = 1;
 
