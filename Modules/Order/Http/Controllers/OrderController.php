@@ -5,6 +5,7 @@ namespace Modules\Order\Http\Controllers;
 use stdClass;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Modules\Book\Entities\Book;
 use Yajra\Datatables\Datatables;
 use Modules\Order\Entities\Order;
@@ -12,9 +13,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Book\Entities\TheBook;
 use Illuminate\Support\Facades\Log;
+use Modules\Order\Entities\BookInOrder;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Contracts\Support\Renderable;
-use Modules\Order\Entities\BookInOrder;
 
 class OrderController extends Controller
 {
@@ -67,12 +68,16 @@ class OrderController extends Controller
             $validatorArray = [
                 'user_id' => 'required',
                 'barcode' => 'required',
-                'book_id' => 'required'
+                'book_id' => 'required',
+                'delivery' => 'integer',
+                'address' => Rule::requiredIf($params['delivery'] == $this->order::SHIPPING)
             ];
             $messages = [
                 'user_id.required' => 'Thiếu thông tin người đặt mượn',
                 'barcode.required' => 'Thiếu mã sách (barcode)',
-                'book_id.required' => 'Thiếu mã đầu sách'
+                'book_id.required' => 'Thiếu mã đầu sách',
+                'delivery.integer' => 'Thiếu dữ liệu hình thức lấy sách',
+                'address.required' => 'Thiếu địa chỉ nhận sách'
             ];
             $validator = Validator::make($params, $validatorArray, $messages);
             if ($validator->fails()) {
@@ -93,7 +98,9 @@ class OrderController extends Controller
                 'restore_deadline' => Carbon::now()->tomorrow()->addDays($this->order::DEFAULT_DEADLINE),
                 'pick_time' => Carbon::now(),
                 'created_at' => Carbon::now(),
-                'user_id' => $params['user_id']
+                'user_id' => $params['user_id'],
+                'delivery' => $params['delivery'],
+                'address' => array_key_exists('address', $params) ? $params['address'] : null
             ];
 
             $orderId = $this->order->insertGetId($order);
@@ -217,12 +224,16 @@ class OrderController extends Controller
 
             $validatorArray = [
                 'barcode' => 'required',
-                'order_status' => 'integer|size:1'
+                'order_status' => 'integer|size:1',
+                'delivery' => 'integer',
+                'address' => Rule::requiredIf($params['delivery'] == $this->order::SHIPPING)
             ];
             $messages = [
                 'barcode.required' => 'Thiếu mã sách (barcode)',
                 'order_status.integer' => 'Lỗi. (status phải là số)',
                 'order_status.size' => 'Lỗi. (status phải bằng 1)',
+                'delivery.integer' => 'Thiếu dữ liệu hình thức lấy sách',
+                'address.required' => 'Thiếu địa chỉ nhận sách'
             ];
             $validator = Validator::make($params, $validatorArray, $messages);
             if ($validator->fails()) {
@@ -232,7 +243,9 @@ class OrderController extends Controller
             $order = [
                 'status' => $this->order::BORROWING,
                 'restore_deadline' => Carbon::now()->tomorrow()->addDays($this->order::DEFAULT_DEADLINE),
-                'pick_time' => Carbon::now()
+                'pick_time' => Carbon::now(),
+                'delivery' => $params['delivery'],
+                'address' => array_key_exists('address', $params) ? $params['address'] : null
             ];
 
             $this->order->updateOrder($orderId, $order);
@@ -284,7 +297,7 @@ class OrderController extends Controller
             ];
             $messages = [
                 'barcode.required' => 'Thiếu mã sách (barcode)',
-                'order_status.integer' => 'Lỗi. (status phải là số)',
+                'order_status.integer' => 'Lỗi. (status phải là số)'
             ];
             $validator = Validator::make($params, $validatorArray, $messages);
             if ($validator->fails()) {

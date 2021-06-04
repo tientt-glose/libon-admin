@@ -146,6 +146,33 @@
             <div class="col-12">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
+                        <h3 class="card-title">Phần thông tin hình thức lấy sách</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Hình thức lấy sách</label>
+                                    <select class="form-control" disabled>
+                                        <option value="1" {{ $query->delivery == 1 ? 'selected' : null }}>Tự đến lấy
+                                        </option>
+                                        <option value="2" {{ $query->delivery == 2 ? 'selected' : null }}>Sử dụng đơn vị
+                                            vận chuyển</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Địa chỉ nhận sách</label>
+                                    <input class="form-control" type="text" placeholder="Không khả dụng"
+                                        value="{{ $query->address }}" disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
                         <h3 class="card-title">Trạng thái đơn mượn</h3>
                     </div>
                     <!-- /.card-header -->

@@ -19,6 +19,9 @@ class Order extends Model
     const DEFAULT_DEADLINE = 60; //60 ngay
     const DEFAULT_QUANTITY = 8; //8 quyen
 
+    const PICKUP = 1; //tu den lay
+    const SHIPPING = 2; //ship
+
     public static function listStatus()
     {
         return array(

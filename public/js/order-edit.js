@@ -178,11 +178,19 @@ function formValidate() {
             "barcode[]": {
                 require_barcode: true,
             },
+            "address": {
+                required: true
+            }
         },
         messages: {
             "barcode[]": {
                 require_barcode: function () {
                     toastr.error('Vui lòng nhập/trả hết sách trong đơn')
+                }
+            },
+            "address": {
+                required: function () {
+                    toastr.error('Vui lòng nhập địa chỉ nhận sách')
                 }
             }
         },
