@@ -145,9 +145,16 @@
                 <div class="col-md-6">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Phần nhập ảnh</h3>
+                            <h3 class="card-title">Phần nhập file</h3>
                         </div>
                         <div class="card-body">
+                            <div class="form-group">
+                                <label for="pdf">File PDF đọc thử sách</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="pdf" id="pdf">
+                                    <label class="custom-file-label" for="pdf">Chọn file</label>
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <label for="pic_1">Ảnh 1 (ảnh chính)</label>
                                 <div class="custom-file">

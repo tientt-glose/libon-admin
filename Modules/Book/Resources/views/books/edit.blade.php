@@ -154,15 +154,28 @@
                 <div class="col-md-6">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Phần nhập ảnh</h3>
+                            <h3 class="card-title">Phần nhập file</h3>
                         </div>
                         <div class="card-body">
+                            <div class="form-group">
+                                <label for="pdf">File PDF đọc thử sách</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="pdf" id="pdf">
+                                    <label class="custom-file-label"
+                                        for="pdf">{{ $uploadedFile ? $uploadedFile : 'Chọn file'}}</label>
+                                </div>
+                                @if ($book->preview_link)
+                                <a href="{{ $book->preview_link ? $book->preview_link : '#' }}" target="_blank">Đọc
+                                    thử</a>
+                                @endif
+                            </div>
                             <div class="form-group">
                                 <label for="pic_1">Ảnh 1 (ảnh chính)</label>
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input preview-upload-image"
                                         name="cover_path[]" id="pic_1" value="{{ $book->pic_link[0] }}">
-                                    <label class="custom-file-label" for="pic_1">Chọn file</label>
+                                    <label class="custom-file-label"
+                                        for="pic_1">{{ $listImgName[0] ? $listImgName[0] : 'Chọn file'}}</label>
                                 </div>
                                 <img src="{{ ($book->pic_link[0] != null) ? url($book->pic_link[0]) : '' }}" alt=""
                                     class="preview-image" />
@@ -172,7 +185,8 @@
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input preview-upload-image"
                                         name="cover_path[]" id="pic_2">
-                                    <label class="custom-file-label" for="pic_2">Chọn file</label>
+                                    <label class="custom-file-label"
+                                        for="pic_2">{{ $listImgName[1] ? $listImgName[1] : 'Chọn file'}}</label>
                                 </div>
                                 <img src="{{ ($book->pic_link[1] != null) ? url($book->pic_link[1]) : '' }}" alt=""
                                     class="preview-image" />
@@ -182,7 +196,8 @@
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input preview-upload-image"
                                         name="cover_path[]" id="pic_3">
-                                    <label class="custom-file-label" for="pic_3">Chọn file</label>
+                                    <label class="custom-file-label"
+                                        for="pic_3">{{ $listImgName[2] ? $listImgName[2] : 'Chọn file'}}</label>
                                 </div>
                                 <img src="{{ ($book->pic_link[2] != null) ? url($book->pic_link[2]) : '' }}" alt=""
                                     class="preview-image" />
@@ -192,7 +207,8 @@
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input preview-upload-image"
                                         name="cover_path[]" id="pic_4">
-                                    <label class="custom-file-label" for="pic_4">Chọn file</label>
+                                    <label class="custom-file-label"
+                                        for="pic_4">{{ $listImgName[3] ? $listImgName[3] : 'Chọn file'}}</label>
                                 </div>
                                 <img src="{{ ($book->pic_link[3] != null) ? url($book->pic_link[3]) : '' }}" alt=""
                                     class="preview-image" />
@@ -202,7 +218,8 @@
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input preview-upload-image"
                                         name="cover_path[]" id="pic_5">
-                                    <label class="custom-file-label" for="pic_5">Chọn file</label>
+                                    <label class="custom-file-label"
+                                        for="pic_5">{{ $listImgName[4] ? $listImgName[4] : 'Chọn file'}}</label>
                                 </div>
                                 <img src="{{ ($book->pic_link[4] != null) ? url($book->pic_link[4]) : '' }}" alt=""
                                     class="preview-image" />
