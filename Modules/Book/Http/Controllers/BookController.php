@@ -77,6 +77,7 @@ class BookController extends Controller
     {
         DB::beginTransaction();
         try {
+            // dd($request, $request->all());
             $params = $request->all();
 
             $validatorArray = [
@@ -86,7 +87,8 @@ class BookController extends Controller
                 'cate_id' => 'required|array',
                 'content' => 'required',
                 'author' => 'required',
-                'cover_path' => 'required|array|min:1|max:5'
+                'cover_path' => 'required|array|min:1|max:5',
+                'pdf' => 'mimes:pdf|max:2048'
             ];
             $messages = [
                 'book_name.required' => 'Thiếu tên đầu sách',
@@ -102,6 +104,8 @@ class BookController extends Controller
                 'cover_path.array' => 'Ảnh upload phải là 1 tập ảnh',
                 'cover_path.min' => 'Ảnh upload phải từ 1 ảnh trở lên',
                 'cover_path.max' => 'Ảnh upload chỉ tối đa 5 ảnh',
+                'pdf.mimes' => 'Định dạng file phải là pdf',
+                'pdf.max' => 'Kích thước file tối đa là 2MB'
             ];
             $validator = Validator::make($params, $validatorArray, $messages);
             if ($validator->fails()) {
@@ -120,13 +124,22 @@ class BookController extends Controller
                 }
             }
 
+            $saveFile = null;
+
+            if (array_key_exists('pdf', $params)) {
+                $fileName = '_' . substr(md5('_' . time()), 0, 15) . '.' . $request->pdf->extension();
+                $request->pdf->move(public_path('uploads'), $fileName);
+                $saveFile = 'uploads/' . $fileName;
+            }
+
             $book = [
                 'name' => $params['book_name'],
                 'publisher_id' => $params['pub_id'],
                 'page_number' => $params['page_number'],
                 'content_summary' => $params['content'],
                 'author' => $params['author'],
-                'pic_link' => json_encode($listImg)
+                'pic_link' => json_encode($listImg),
+                'preview_link' => $saveFile
             ];
 
             $createdBookId = $this->book->insertGetId($book);
@@ -153,6 +166,11 @@ class BookController extends Controller
             $book->pic_link = json_decode($book->pic_link);
         }
 
+        $listImgName = array();
+        foreach ($book->pic_link as $key => $value) {
+            $listImgName[$key] = substr($value, strpos($value, '_'));
+        }
+
         $listCate = array();
         //todo: hoi, co cach nao select duoc luon ko
         foreach ($book->categories()->get() as $cate) {
@@ -174,7 +192,13 @@ class BookController extends Controller
             $selectedPublishers[$publisher->id] = $publisher->name;
         }
 
-        return view('book::books.edit', compact('selectedCategories', 'selectedPublishers', 'book', 'listCate'));
+        $uploadedFile = null;
+        if (!empty($book->preview_link)) {
+            $uploadedFile = substr($book->preview_link, strpos($book->preview_link, '_'));
+            $book->preview_link = url($book->preview_link);
+        }
+
+        return view('book::books.edit', compact('selectedCategories', 'selectedPublishers', 'book', 'listCate', 'uploadedFile', 'listImgName'));
     }
 
     /**
@@ -196,7 +220,8 @@ class BookController extends Controller
                 'cate_id' => 'required|array',
                 'content' => 'required',
                 'author' => 'required',
-                'cover_path' => 'array|max:5'
+                'cover_path' => 'array|max:5',
+                'pdf' => 'mimes:pdf|max:2048'
             ];
             $messages = [
                 'book_name.required' => 'Thiếu tên đầu sách',
@@ -212,6 +237,8 @@ class BookController extends Controller
                 'cover_path.array' => 'Ảnh upload phải là 1 tập ảnh',
                 'cover_path.min' => 'Ảnh upload phải từ 1 ảnh trở lên',
                 'cover_path.max' => 'Ảnh upload chỉ tối đa 5 ảnh',
+                'pdf.mimes' => 'Định dạng file phải là pdf',
+                'pdf.max' => 'Kích thước file tối đa là 2MB'
             ];
             $validator = Validator::make($params, $validatorArray, $messages);
             if ($validator->fails()) {
@@ -242,13 +269,24 @@ class BookController extends Controller
                 $listImg = $oldListImage;
             }
 
+            $saveFile = $this->book->getPreviewLink($id)->preview_link;
+            $deleteFile = null;
+
+            if (array_key_exists('pdf', $params)) {
+                $fileName = '_' . substr(md5('_' . time()), 0, 15) . '.' . $request->pdf->extension();
+                $request->pdf->move(public_path('uploads'), $fileName);
+                $deleteFile = $saveFile; // =old file
+                $saveFile = 'uploads/' . $fileName;
+            }
+
             $book = [
                 'name' => $params['book_name'],
                 'publisher_id' => $params['pub_id'],
                 'page_number' => $params['page_number'],
                 'content_summary' => $params['content'],
                 'author' => $params['author'],
-                'pic_link' => json_encode($listImg)
+                'pic_link' => json_encode($listImg),
+                'preview_link' => $saveFile
             ];
 
             $this->book->updateBook($id, $book);
@@ -257,6 +295,13 @@ class BookController extends Controller
                 $picLink = public_path($picPath);
                 if (File::exists($picLink)) {
                     File::delete($picLink);
+                }
+            }
+
+            if ($deleteFile) {
+                $deleteLink = public_path($deleteFile);
+                if (File::exists($deleteLink)) {
+                    File::delete($deleteLink);
                 }
             }
 
@@ -327,7 +372,7 @@ class BookController extends Controller
                         }
                         if ($key == 'search') {
                             $search = $value['value'];
-                            $query->where('name','LIKE', "%$search%")->orWhere('content_summary','LIKE', "%$search%")->orWhere('author','LIKE', "%$search%");
+                            $query->where('name', 'LIKE', "%$search%")->orWhere('content_summary', 'LIKE', "%$search%")->orWhere('author', 'LIKE', "%$search%");
                         }
                     }
                 }
