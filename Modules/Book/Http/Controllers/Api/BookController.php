@@ -78,6 +78,9 @@ class BookController extends ApiController
 
                     $bookItem->pic_link = $arr;
                 }
+
+                $bookItem->preview_link = $bookItem->preview_link ? url($bookItem->preview_link) : null;
+
                 return $this->successResponse(['result' => $bookItem], 'Response Successfully');
             } else {
                 return $this->errorResponse([], 'None data!');

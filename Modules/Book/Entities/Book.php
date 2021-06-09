@@ -54,6 +54,11 @@ class Book extends Model
         return $this->select('pic_link')->where('id', $id)->get();
     }
 
+    public function getPreviewLink($id)
+    {
+        return $this->select('preview_link')->where('id', $id)->first();
+    }
+
     public function checkStatusOfBook($id)
     {
         return $this->where('id', $id)->whereHas('theBooks', function (Builder $query) {
