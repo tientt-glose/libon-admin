@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class EditOrdersTable extends Migration
+class EditUsersTable3 extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class EditOrdersTable extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->tinyInteger('delivery');
-            $table->text('address')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('referral_source')->nullable()->change();
         });
     }
 
@@ -26,9 +25,8 @@ class EditOrdersTable extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('delivery');
-            $table->dropColumn('address');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('referral_source')->change();
         });
     }
 }
