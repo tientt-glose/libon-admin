@@ -43,6 +43,11 @@ class Book extends Model
         return $this->hasMany(BookInOrder::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function getBookById($id)
     {
         return $this->where('id', $id)->first();

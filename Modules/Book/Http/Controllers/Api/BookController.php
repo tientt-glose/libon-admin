@@ -9,8 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Modules\Book\Entities\Book;
 use Illuminate\Routing\Controller;
-
 use Illuminate\Support\Facades\DB;
+use Modules\Book\Entities\Comment;
 use Illuminate\Support\Facades\Log;
 use Modules\Book\Entities\Category;
 use Illuminate\Support\Facades\Validator;
@@ -20,12 +20,14 @@ class BookController extends ApiController
 {
     protected $book;
     protected $category;
+    protected $comment;
 
     //todo: tai sao lai can
-    public function __construct(Book $book, Category $category)
+    public function __construct(Book $book, Category $category, Comment $comment)
     {
         $this->book = $book;
         $this->category = $category;
+        $this->comment = $comment;
     }
 
     public function getAllBook(Request $request)
@@ -128,7 +130,6 @@ class BookController extends ApiController
 
     public function checkPending(Request $request)
     {
-        DB::beginTransaction();
         try {
             $result = new stdClass();
             $params = $request->all();
@@ -147,10 +148,8 @@ class BookController extends ApiController
             $result->isPending = $this->book->checkPending($params['book_id']);
             $result->success = 1;
 
-            DB::commit();
             return $this->successResponse($result, 'Response Successfully');
         } catch (\Throwable $th) {
-            DB::rollBack();
             Log::error('[Check Book Pending Client] ' . $th->getMessage());
             return $this->successResponse(["errors" => $th->getMessage()], 'Response Successfully');
         }
@@ -158,11 +157,9 @@ class BookController extends ApiController
 
     public function checkBorrowable(Request $request)
     {
-        DB::beginTransaction();
         try {
             $result = new stdClass();
             $params = $request->all();
-
             $validatorArray = [
                 'book_id' => 'required',
             ];
@@ -177,11 +174,79 @@ class BookController extends ApiController
             $result->isBorrowable = $this->book->checkBorrowable($params['book_id']);
             $result->success = 1;
 
+            return $this->successResponse($result, 'Response Successfully');
+        } catch (\Throwable $th) {
+            Log::error('[Check Book Borrowable Client] ' . $th->getMessage());
+            return $this->successResponse(["errors" => $th->getMessage()], 'Response Successfully');
+        }
+    }
+
+    public function getBookComment(Request $request)
+    {
+        try {
+            $id = $request->id;
+
+            if (empty($id)) {
+                return $this->successResponse(["errors" => 'Invalid! Need id of the book.'], 'Response Successfully');
+            }
+
+            $comments = $this->comment->getCommentByBookId($id);
+
+            if ($comments) {
+                foreach ($comments as $comment) {
+                    $name = $comment->user()->first()->fullname;
+                    $userId = $comment->user()->first()->id_staff_student;
+                    $comment->user_id = $name . ' ' . $userId;
+                }
+
+                return $this->successResponse(['result' => $comments], 'Response Successfully');
+            } else {
+                return $this->successResponse(["errors" => 'Invalid! Need id of the book.'], 'Response Successfully');
+            }
+        } catch (\Throwable $th) {
+            Log::error('[Get Comment List Client] ' . $th->getMessage());
+            return $this->successResponse(["errors" => $th->getMessage()], 'Response Successfully');
+        }
+    }
+
+    public function createBookComment(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $result = new stdClass();
+            $params = $request->all();
+
+            $validatorArray = [
+                'book_id' => 'required',
+                'user_id'  => 'required',
+                'content' => 'required',
+            ];
+            $messages = [
+                'content.required' => 'Thiếu nội dung bình luận',
+                'user_id.required'  => 'Thiếu thông tin người bình luận',
+                'book_id.required' => 'Thiếu thông tin sách',
+            ];
+            $validator = Validator::make($params, $validatorArray, $messages);
+            if ($validator->fails()) {
+                return $this->successResponse(["errors" => $validator->errors()], 'Response Successfully');
+            }
+
+            $comment = [
+                'book_id' => $params['book_id'],
+                'user_id' => $params['user_id'],
+                'content' => $params['content'],
+                'created_at' => Carbon::now(),
+            ];
+
+            $this->comment->insert($comment);
+
+            $result->success = 1;
+
             DB::commit();
             return $this->successResponse($result, 'Response Successfully');
         } catch (\Throwable $th) {
             DB::rollBack();
-            Log::error('[Check Book Borrowable Client] ' . $th->getMessage());
+            Log::error('[Borrow Order Client] ' . $th->getMessage());
             return $this->successResponse(["errors" => $th->getMessage()], 'Response Successfully');
         }
     }

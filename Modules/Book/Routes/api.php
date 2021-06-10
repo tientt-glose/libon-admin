@@ -20,9 +20,10 @@ use Illuminate\Http\Request;
 Route::namespace('Api')->group(function () {
     Route::prefix('v1/book')->group(function () {
         Route::post('/', 'BookController@getAllBook');
-
         Route::post('/detail', 'BookController@getBookDetail');
         Route::post('/pending', 'BookController@checkPending');
         Route::post('/borrowable', 'BookController@checkBorrowable');
+        Route::post('/comment', 'BookController@getBookComment');
+        Route::post('/createComment', 'BookController@createBookComment');
     });
 });

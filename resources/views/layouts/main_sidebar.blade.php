@@ -74,6 +74,13 @@ $currentRouteName = \Request::route()->getName();
                             <p>Quản lý Nhà xuất bản</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('book.comments.index') }}"
+                            class="nav-link @if($currentRouteName == 'book.comments.index') active @endif">
+                            <i class="fas fa-minus nav-icon"></i>
+                            <p>Quản lý bình luận</p>
+                        </a>
+                    </li>
                 </ul>
             </li>
             <li class="nav-item @if(strpos($currentRouteName, 'user.') === 0) menu-open @endif">
