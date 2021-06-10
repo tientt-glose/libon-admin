@@ -31,4 +31,9 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::resource('publishers', 'PublisherController', ['as' => 'book'])->only(['index', 'store']);
     Route::post('publishers/delete', 'PublisherController@deletePublisher')->name('book.publishers.deletePub');
     Route::post('publishers/update', 'PublisherController@editPublisher')->name('book.publishers.editPub');
+
+    Route::resource('comments', 'CommentController', ['as' => 'book'])->only(['index', 'store']);
+    Route::get('comments/get', 'CommentController@get')->name('book.comments.get');
+    Route::get('comments/delete/{id}', 'CommentController@destroy')->name('book.comments.destroy');
+    Route::get('comments/undo/{id}', 'CommentController@undo')->name('book.comments.undo');
 });

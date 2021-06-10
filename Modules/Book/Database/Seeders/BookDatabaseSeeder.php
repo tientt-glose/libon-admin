@@ -14,6 +14,7 @@ class BookDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(CategoryDatabaseSeeder::class);
+        // $this->call(CategoryDatabaseSeeder::class);
+        $this->call(CommentTableSeeder::class);
     }
 }

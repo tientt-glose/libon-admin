@@ -347,6 +347,13 @@ class BookController extends Controller
                 }
             }
 
+            if ($book->preview_link) {
+                $deleteLink = public_path($book->preview_link);
+                if (File::exists($deleteLink)) {
+                    File::delete($deleteLink);
+                }
+            }
+
             $this->book->deleteBook($id);
             DB::commit();
             return redirect()->back()->with(['success' => 'Xóa đầu sách thành công']);

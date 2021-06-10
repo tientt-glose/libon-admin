@@ -3,6 +3,7 @@
 namespace Modules\Core\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Book\Entities\Comment;
 use Modules\Order\Entities\Order;
 
 class User extends Model
@@ -22,6 +23,11 @@ class User extends Model
     public function organization()
     {
         return $this->belongsTo(Organization::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
     public function getUserByCard($userCard)

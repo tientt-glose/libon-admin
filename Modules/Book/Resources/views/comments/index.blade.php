@@ -1,5 +1,5 @@
 @extends('index')
-@section('title', 'Quản lý đầu sách')
+@section('title', 'Quản lý bình luận')
 
 @section('before-adminLTE-styles-end')
 <!-- Select2 -->
@@ -13,7 +13,7 @@
 
 @section ('before-styles-end')
 <!-- custom -->
-<link rel="stylesheet" href="{{ asset('css/book.css') }}">
+<link rel="stylesheet" href="{{ asset('css/comment.css') }}">
 @endsection
 
 @section('script')
@@ -46,40 +46,35 @@
     //Initialize Select2 Elements
         $('.select2').select2({
             width: 'resolve',
-            dropdownParent: $('#category-select'),
+            dropdownParent: $('#select-book'),
         })
     });
 </script>
 
 <script>
     $(function() {
-        table = $('#table-book').DataTable({
+        table = $('#table-comment').DataTable({
             processing: true,
             serverSide: true,
             autoWidth: false,
             searching: true,
             responsive: true,
-            // lengthMenu: [5, 25, 50, "All"],
             ajax: {
-                url: '{{ route("book.books.get") }}',
+                url: '{{ route("book.comments.get") }}',
                 type: 'get',
                 data: function(d) {
-                    d.category_id = $('#category option:selected').val();
+                    // d.category_id = $('#category option:selected').val();
                     d.csrf = '{{ csrf_field() }}';
                 }
             },
             columns: [
                 {data: 'id', sortable: true},
-                {data: 'name', sortable: true},
-                {data: 'pic_link', orderable: false},
-                {data: 'publisher', orderable: false},
-                {data: 'page_number', sortable: true},
-                {data: 'categories', orderable: false},
-                {data: 'content_summary', orderable: false},
-                {data: 'author', orderable: false},
+                {data: 'content', orderable: false},
+                {data: 'like', sortable: true},
+                {data: 'dislike', sortable: true},
                 {data: 'status', orderable: false},
-                {data: 'quantity', sortable: true},
-                {data: 'borrowed', sortable: true},
+                {data: 'user', orderable: false},
+                {data: 'book', orderable: false},
                 {data: 'actions', orderable: false},
             ],
             order: [[0, 'desc' ]],
@@ -99,10 +94,6 @@
             columnDefs: [
             ]
         });
-
-        $('.filter-cate').change(function() {
-            table.draw();
-        });
     });
 </script>
 @endsection
@@ -113,12 +104,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Quản lý đầu sách</h1>
+                <h1 class="m-0">Quản lý bình luận</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
-                    <li class="breadcrumb-item active">Danh sách đầu sách</li>
+                    <li class="breadcrumb-item active">Danh sách bình luận</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -131,33 +122,21 @@
     <!-- Default box -->
     <div class="card card-primary card-outline">
         <div class="card-header">
-            <a href="{{ route('book.books.create') }}" class="btn btn-primary float-right">
-                Thêm đầu sách</a>
-            <div class="filter float-right" id="category-select">
-                <select class="form-control filter-cate select2" style="width: 100%;" name="cate_id" id="category">
-                    <option value="">--Loại sách--</option>
-                    @foreach($categories as $cate)
-                    <option value="{{ $cate->id }}">{{ $cate->name }}</option>
-                    @endforeach
-                </select>
-            </div>
+            <a href="#" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-add-comment">
+                Thêm bình luận</a>
         </div>
         <div class="card-body p-2">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover projects" id="table-book">
+                <table class="table table-striped table-bordered table-hover projects" id="table-comment">
                     <thead>
                         <tr>
-                            <th>Mã đầu sách</th>
-                            <th>Tên sách</th>
-                            <th>Ảnh bìa</th>
-                            <th>Nhà xuất bản</th>
-                            <th>Số trang</th>
-                            <th>Thể loại</th>
-                            <th>Mô tả</th>
-                            <th>Tác giả</th>
+                            <th>Mã bình luận</th>
+                            <th>Nội dung</th>
+                            <th>Like</th>
+                            <th>Dislike</th>
                             <th>Trạng thái</th>
-                            <th>Số lượng</th>
-                            <th>Đã mượn</th>
+                            <th>Người dùng</th>
+                            <th>Sách</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -172,4 +151,53 @@
     <!-- /.card -->
 </section>
 <!-- /.content -->
+
+<div id="modal-add-comment" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="modal-header">
+                    <h4 class="modal-title">Thêm bình luận</h4>
+                </div>
+                <form action="{{ route('book.comments.store') }}" method="POST" name="form-add-comment">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="callout callout-danger">
+                                <h5>Lưu ý</h5>
+                                <p>Bình luận đã thêm thì không thể sửa, chỉ có thể xóa.</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="comment_add">Nội dung</label>
+                            <textarea class="form-control" rows="8" id="comment_add" name="content"
+                                placeholder="Nhập nội dung bình luận" required></textarea>
+                        </div>
+                        <div class="form-group" id="select-book">
+                            <label for="book_id">Bình luận cho sách</label>
+                            <select class="form-control select2" style="width: 100%;" name="book_id" id="book_id"
+                                required>
+                                <option value="">--Lựa chọn sách--</option>
+                                @foreach($books as $book)
+                                <option value="{{ $book->id }}">{{ '[' . $book->id . '] ' . $book->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="user">Người bình luận</label>
+                            <input type="text" class="form-control" id="user" name="user"
+                                value="{{ '[' . auth()->user()->id . '] ' . auth()->user()->fullname }}"
+                                placeholder="Không khả dụng" disabled>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection

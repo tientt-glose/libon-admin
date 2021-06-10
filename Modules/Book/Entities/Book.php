@@ -39,6 +39,11 @@ class Book extends Model
         return $this->hasMany(BookInOrder::class);
     }
 
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
     public function getBookById($id)
     {
         return $this->where('id', $id)->first();
@@ -57,6 +62,11 @@ class Book extends Model
     public function getPreviewLink($id)
     {
         return $this->select('preview_link')->where('id', $id)->first();
+    }
+
+    public function getBasicBook()
+    {
+        return $this->select('id', 'name')->get();
     }
 
     public function checkStatusOfBook($id)
