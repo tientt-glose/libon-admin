@@ -3,6 +3,7 @@
 namespace Modules\Book\Entities;
 
 use Illuminate\Database\Eloquent\Model;
+use Modules\Order\Entities\BookInOrder;
 use Illuminate\Database\Eloquent\Builder;
 
 class Book extends Model
@@ -18,6 +19,9 @@ class Book extends Model
 
     const BORROWABLE = 1;
     const UNBORROWABLE = 0;
+    const PENDING = 2;
+    const THEORY = 'Giáo trình';
+    const IT = 'Công nghệ thông tin';
 
     public function theBooks()
     {
@@ -52,6 +56,38 @@ class Book extends Model
     public function getPicLink($id)
     {
         return $this->select('pic_link')->where('id', $id)->get();
+    }
+
+    public function getPreviewLink($id)
+    {
+        return $this->select('preview_link')->where('id', $id)->first();
+    }
+
+    public function getBasicBook()
+    {
+        return $this->select('id', 'name')->get();
+    }
+
+    public function getStatus($bookId)
+    {
+        return $this->select('can_borrow')->where('id', $bookId)->first()->can_borrow;
+        // return Book::select('can_borrow')->where('id', $bookId)->first()->can_borrow;
+    }
+
+    public function getBookTheory()
+    {
+        $cateId = Category::select('id')->where('name', 'LIKE', '%' . $this::THEORY . '%')->first()->id;
+        return $this->whereHas('categories', function ($q) use ($cateId) {
+            $q->where('category_id', $cateId);
+        })->get();
+    }
+
+    public function getBookIT()
+    {
+        $cateId = Category::select('id')->where('name', 'LIKE', '%' . $this::IT . '%')->first()->id;
+        return $this->whereHas('categories', function ($q) use ($cateId) {
+            $q->where('category_id', $cateId);
+        })->get();
     }
 
     public function checkStatusOfBook($id)
@@ -101,5 +137,31 @@ class Book extends Model
             $column .= '<a href="' . route('book.books.destroy', $data->id) . '" onclick="return confirm(' . $message . ')" class="btn btn-danger btn-sm"><i class="fas fa-trash" title="Xóa đầu sách"></i></a>';
         }
         return $column;
+    }
+
+    public function checkPending($bookId)
+    {
+        // $book = Book::where('id', $bookId)->first();
+        // if (Book::getStatus($bookId) == Book::BORROWABLE) {
+        //     return $book->booksInOrders()->whereNull('the_book_id')->count() >= $book->theBooks()->where('status', TheBook::AVAILABLE)->count();
+        // }
+        // else {
+        //     return false;
+        // }
+        $book = $this->where('id', $bookId)->first();
+        if ($this->getStatus($bookId) == $this::BORROWABLE) {
+            return $book->booksInOrders()->whereNull('the_book_id')->count() >= $book->theBooks()->where('status', TheBook::AVAILABLE)->count();
+        } else {
+            return false;
+        }
+    }
+
+    public function checkBorrowable($bookId)
+    {
+        if ($this->getStatus($bookId) == $this::BORROWABLE) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

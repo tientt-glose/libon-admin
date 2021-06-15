@@ -44,6 +44,11 @@ class Order extends Model
         return $this->hasMany(BookInOrder::class);
     }
 
+    public function booksInOrdersTrashed()
+    {
+        return $this->hasMany(BookInOrder::class)->withTrashed();
+    }
+
     public function getOrderById($orderId)
     {
         return $this->where('id', $orderId)->first();
@@ -52,6 +57,11 @@ class Order extends Model
     public function getOrderWithUserAndBookById($orderId)
     {
         return $this->where('id', $orderId)->with('user:id,id_card,fullname,id_staff_student,email', 'booksInOrders.theBook:id,barcode', 'booksInOrders.book:id,pic_link,name,author')->first();
+    }
+
+    public function getOrderWithUserAndBookByIdWithTrash($orderId)
+    {
+        return $this->where('id', $orderId)->with('user:id,id_card,fullname,id_staff_student,email', 'booksInOrdersTrashed.theBook:id,barcode', 'booksInOrdersTrashed.book:id,pic_link,name,author')->first();
     }
 
     public function getOrderWithBookByUserId($userId)

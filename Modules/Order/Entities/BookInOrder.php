@@ -5,9 +5,12 @@ namespace Modules\Order\Entities;
 use Modules\Book\Entities\Book;
 use Modules\Book\Entities\TheBook;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class BookInOrder extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = [];
     protected $table = 'books_in_orders';
 
