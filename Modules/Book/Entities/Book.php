@@ -97,6 +97,12 @@ class Book extends Model
         })->exists();
     }
 
+    public function checkStatusOfBook2($id)
+    {
+        $book = $this->where('id', $id)->whereHas('theBooks')->exists() || $this->where('id', $id)->whereHas('booksInOrders')->exists() ;
+        return $book;
+    }
+
     public function updateBook($id, $book)
     {
         return $this->where('id', $id)->update($book);
@@ -132,7 +138,7 @@ class Book extends Model
         $message = "'Bạn có chắc chắn muốn xóa đầu sách này không?'";
         $column = "";
         if (!empty($data)) {
-            $column .= '<a href="' . route('book.books.the-books.index', $data->id) . '" class="btn btn-info btn-sm"><i class="fas fa-book" title="Danh sách các sách"></i></a>';
+            $column .= '<a href="' . route('book.books.the-books.index', $data->id) . '" class="btn btn-info btn-sm"><i class="fas fa-book" title="Danh sách cuốn sách"></i></a>';
             $column .= '<a href="' . route('book.books.edit', $data->id) . '" class="btn btn-primary btn-sm"><i class="fas fa-edit" title="Sửa đầu sách"></i></a>';
             $column .= '<a href="' . route('book.books.destroy', $data->id) . '" onclick="return confirm(' . $message . ')" class="btn btn-danger btn-sm"><i class="fas fa-trash" title="Xóa đầu sách"></i></a>';
         }

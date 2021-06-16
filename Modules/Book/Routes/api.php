@@ -22,8 +22,6 @@ Route::namespace('Api')->group(function () {
         Route::post('/', 'BookController@getAllBook');
 
         Route::post('/detail', 'BookController@getBookDetail');
-        Route::post('/comment', 'BookController@getBookComment');
-        Route::post('/createComment', 'BookController@createBookComment');
         Route::post('/pending', 'BookController@checkPending');
         Route::post('/borrowable', 'BookController@checkBorrowable');
     });

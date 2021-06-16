@@ -285,12 +285,13 @@ class BookController extends Controller
             }
 
             // check the book with book
-            $theBookExist = $this->book->checkStatusOfBook($id);
+            $theBookExist = $this->book->checkStatusOfBook2($id);
             if ($theBookExist) {
                 return redirect()->back()->withErrors('Bạn không được phép xóa đầu sách đang có sách đính kèm');
             }
 
             $book = $this->book->find($id);
+            // Xoa cate
             $book->categories()->detach();
 
             $listImg = json_decode($book->pic_link);
@@ -327,7 +328,7 @@ class BookController extends Controller
                         }
                         if ($key == 'search') {
                             $search = $value['value'];
-                            $query->where('name','LIKE', "%$search%")->orWhere('content_summary','LIKE', "%$search%")->orWhere('author','LIKE', "%$search%");
+                            $query->where('name', 'LIKE', "%$search%")->orWhere('content_summary', 'LIKE', "%$search%")->orWhere('author', 'LIKE', "%$search%");
                         }
                     }
                 }
