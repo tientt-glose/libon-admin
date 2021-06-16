@@ -82,7 +82,7 @@ class TheBookController extends Controller
 
             foreach ($listBarcode as $barcode) {
                 $theBook = [
-                    'barcode' => $barcode,
+                    'barcode' => trim($barcode),
                     'publishing_year' => $params['pub_year'],
                     'book_id' => $bookId,
                 ];
@@ -150,7 +150,7 @@ class TheBookController extends Controller
             }
 
             $theBook = [
-                'barcode' => $params['barcode'],
+                'barcode' => trim($params['barcode']),
                 'publishing_year' => $params['pub_year'],
             ];
 

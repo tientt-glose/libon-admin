@@ -49,7 +49,8 @@ class UserController extends ApiController
                     } while (count($this->user->getUserByAccessToken($user->access_token)) != 0);
 
                     $data = [
-                        'access_token' => $user->access_token
+                        'access_token' => $user->access_token,
+                        'count_login' => $user->count_login + 1
                     ];
 
                     $this->user->updateUser($user->id, $data);
