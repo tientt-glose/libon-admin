@@ -17,8 +17,6 @@ class CreateCommentsTable extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('book_id');
-            $table->integer('like')->default(0);
-            $table->integer('dislike')->default(0);
             $table->text('content');
             $table->timestamps();
         });

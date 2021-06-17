@@ -70,8 +70,6 @@
             columns: [
                 {data: 'id', sortable: true},
                 {data: 'content', orderable: false},
-                {data: 'like', sortable: true},
-                {data: 'dislike', sortable: true},
                 {data: 'status', orderable: false},
                 {data: 'user', orderable: false},
                 {data: 'book', orderable: false},
@@ -132,8 +130,6 @@
                         <tr>
                             <th>Mã bình luận</th>
                             <th>Nội dung</th>
-                            <th>Like</th>
-                            <th>Dislike</th>
                             <th>Trạng thái</th>
                             <th>Người dùng</th>
                             <th>Sách</th>

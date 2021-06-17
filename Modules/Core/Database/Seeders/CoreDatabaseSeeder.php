@@ -17,7 +17,6 @@ class CoreDatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(GroupSeeder::class);
         $this->call(AdminSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(OrganizationTableSeeder::class);

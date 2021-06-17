@@ -27,40 +27,8 @@ class CreateUsersTable extends Migration
             $table->foreignId('organization_id');
             $table->tinyInteger('career');
             $table->string('id_staff_student');
-            $table->tinyInteger('referral_source');
-            $table->string('avatar')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('groups', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('group_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('group_id');
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-            $table->softDeletes();
-        });
-
-        Schema::create('role_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('role_id');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -74,9 +42,5 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::dropIfExists('users');
-        Schema::dropIfExists('groups');
-        Schema::dropIfExists('group_user');
-        Schema::dropIfExists('roles');
-        Schema::dropIfExists('role_user');
     }
 }

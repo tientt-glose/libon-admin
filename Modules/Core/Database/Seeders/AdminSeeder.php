@@ -27,30 +27,7 @@ class AdminSeeder extends Seeder
                     'organization_id' => '1',
                     'career' => '1',
                     'id_staff_student' => '20164069',
-                    'referral_source' => '1',
                     'admin' =>  '1',
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ]
-            ]
-        );
-
-        DB::table('group_user')->updateOrInsert(
-            [
-                [
-                    'user_id' => 1,
-                    'group_id' => 1,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ]
-            ]
-        );
-
-        DB::table('role_user')->updateOrInsert(
-            [
-                [
-                    'user_id' => 1,
-                    'role_id' => 1,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                 ]

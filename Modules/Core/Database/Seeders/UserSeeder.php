@@ -27,7 +27,6 @@ class UserSeeder extends Seeder
                     'organization_id' => '1',
                     'career' => '1',
                     'id_staff_student' => '20164068',
-                    'referral_source' => '1',
                     'admin' =>  '0',
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
@@ -41,42 +40,7 @@ class UserSeeder extends Seeder
                     'organization_id' => '1',
                     'career' => '1',
                     'id_staff_student' => '20164000',
-                    'referral_source' => '1',
                     'admin' =>  '0',
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ]
-            ]
-        );
-
-        DB::table('group_user')->updateOrInsert(
-            [
-                [
-                    'user_id' => 2,
-                    'group_id' => 2,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ],
-                [
-                    'user_id' => 3,
-                    'group_id' => 2,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ]
-            ]
-        );
-
-        DB::table('role_user')->updateOrInsert(
-            [
-                [
-                    'user_id' => 2,
-                    'role_id' => 2,
-                    'created_at' => Carbon::now(),
-                    'updated_at' => Carbon::now()
-                ],
-                [
-                    'user_id' => 3,
-                    'role_id' => 2,
                     'created_at' => Carbon::now(),
                     'updated_at' => Carbon::now()
                 ]

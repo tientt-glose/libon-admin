@@ -338,6 +338,9 @@ class BookController extends Controller
             $book = $this->book->find($id);
             // Xoa cate
             $book->categories()->detach();
+            // Xoa comment
+            $book->comments()->forceDelete();
+
 
             $listImg = json_decode($book->pic_link);
             $listImg = (array)$listImg;
