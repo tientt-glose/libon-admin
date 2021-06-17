@@ -1,5 +1,5 @@
 @extends('index')
-@section('title', 'Quản lý sách')
+@section('title', 'Quản lý cuốn sách')
 
 @section('before-adminLTE-styles-end')
 <!-- Select2 -->
@@ -111,13 +111,13 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0">Quản lý sách</h1>
+                <h1 class="m-0">Quản lý cuốn sách</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
                     <li class="breadcrumb-item"><a href="{{ route('book.books.index') }}">Danh sách đầu sách</a></li>
-                    <li class="breadcrumb-item active">Danh sách các sách</li>
+                    <li class="breadcrumb-item active">Danh sách cuốn sách</li>
                 </ol>
             </div><!-- /.col -->
         </div><!-- /.row -->
@@ -151,7 +151,7 @@
     <div class="card card-primary card-outline">
         <div class="card-header">
             <a href="#" class="btn btn-primary float-right" data-toggle="modal" data-target="#modal-add-the-book">
-                Thêm sách</a>
+                Thêm cuốn sách</a>
         </div>
         <div class="card-body p-2">
             <div class="table-responsive">
@@ -182,7 +182,7 @@
         <div class="modal-content">
             <div class="modal-body">
                 <div class="modal-header">
-                    <h4 class="modal-title">Thêm sách</h4>
+                    <h4 class="modal-title">Thêm cuốn sách</h4>
                 </div>
                 <form action="{{ route('book.books.the-books.store', $bookId) }}" method="POST"
                     name="form-add-the-book">

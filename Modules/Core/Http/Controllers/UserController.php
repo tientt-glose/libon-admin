@@ -128,7 +128,7 @@ class UserController extends Controller
     {
         $user = $this->user->getUserById($id);
         $organization = Organization::all();
-        return view('core::user.edit', compact('user','organization'));
+        return view('core::user.edit', compact('user', 'organization'));
     }
 
     public function update(Request $request, $id)
@@ -170,7 +170,7 @@ class UserController extends Controller
                 return redirect()->back()->withInput()->withErrors($validator->errors());
             }
 
-            if(!empty($request->password)) {
+            if (!empty($request->password)) {
                 $params['password'] = Hash::make($request->password);
             }
             $this->user->updateUser($id, $params);
@@ -191,6 +191,12 @@ class UserController extends Controller
             if (empty($id)) {
                 return redirect()->back()->withErrors('Xóa người dùng không thành công');
             }
+
+            $countOrder = $this->user->find($id)->orders()->count();
+            if ($countOrder > 0) {
+                return redirect()->back()->withErrors('Không thể xóa người dùng đang có đơn mượn');
+            }
+
             $this->user->deleteUser($id);
             DB::commit();
             return redirect()->back()->with(['success' => 'Xóa người dùng thành công']);

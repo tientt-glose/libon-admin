@@ -230,7 +230,7 @@
                                 </tr>
                             </thead>
                             <tbody id="order-table-body">
-                                @foreach ($query->booksInOrders as $key => $theBook)
+                                @foreach ($query->booksInOrdersTrashed as $key => $theBook)
                                 <tr>
                                     <td>{{ ++$key }}</td>
                                     <td id="right-sib">

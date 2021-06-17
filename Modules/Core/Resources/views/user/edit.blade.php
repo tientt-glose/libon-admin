@@ -67,7 +67,7 @@
                 <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Phần nhập thông tin user</h3>
+                            <h3 class="card-title">Phần nhập thông tin người dùng</h3>
                         </div>
                         <!-- /.card-header -->
 
@@ -153,6 +153,11 @@
                                             </option>
                                             <option value="1" @if ($user->admin == 1) selected @endif>Admin</option>
                                         </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="count_login">Số lần đăng nhập</label>
+                                        <input type="number" class="form-control" id="count_login"
+                                            value="{{ $user->count_login }}" disabled>
                                     </div>
                                 </div>
                             </div>

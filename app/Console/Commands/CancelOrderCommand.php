@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Modules\Order\Entities\BookInOrder;
 use Modules\Order\Entities\Order;
 
 class CancelOrderCommand extends Command
@@ -41,14 +42,15 @@ class CancelOrderCommand extends Command
     {
         Log::info('Start cancel order job');
         $orders = Order::all();
-        foreach($orders as $order) {
+        foreach ($orders as $order) {
             $status = $order->status;
             $createdDate = $order->created_at->format('Y-m-d');
             $pickTime = $order->pick_time;
             $id = $order->id;
 
-            if($status == Order::BORROW_ORDER_CREATED_STATUS && (strtotime(date("Y-m-d")) - strtotime($createdDate)) == 86400 && empty($pickTime)) {
+            if ($status == Order::BORROW_ORDER_CREATED_STATUS && (strtotime(date("Y-m-d")) - strtotime($createdDate)) == 86400 && empty($pickTime)) {
                 Order::where('id', $id)->update(['status' => Order::CANCEL]);
+                BookInOrder::where('order_id', $id)->delete();
             }
         }
         Log::info('End cancel order job');

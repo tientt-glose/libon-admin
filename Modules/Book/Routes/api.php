@@ -22,5 +22,7 @@ Route::namespace('Api')->group(function () {
         Route::post('/', 'BookController@getAllBook');
 
         Route::post('/detail', 'BookController@getBookDetail');
+        Route::post('/pending', 'BookController@checkPending');
+        Route::post('/borrowable', 'BookController@checkBorrowable');
     });
 });

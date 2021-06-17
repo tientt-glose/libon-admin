@@ -147,8 +147,9 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $query = $this->order->getOrderWithUserAndBookById($id);
-        foreach ($query->booksInOrders as $value) {
+        $query = $this->order->getOrderWithUserAndBookByIdWithTrash($id);
+        // dd($query);
+        foreach ($query->booksInOrdersTrashed as $value) {
             $img = json_decode($value->book->pic_link);
             $img = url($img[0]);
             $value->book->pic_link = $img;
@@ -348,6 +349,7 @@ class OrderController extends Controller
                     'status' => $this->order::CANCEL,
                 ];
                 $this->order->updateOrder($orderId, $order);
+                $this->order->getOrderById($orderId)->booksInOrders()->delete();
             } else {
                 return redirect()->back()->withInput()->withErrors('Hủy đơn không thành công');
             }
@@ -496,18 +498,21 @@ class OrderController extends Controller
 
                 if (!empty($theBook)) {
                     if ($theBook->status == 1) {
-                        $img = json_decode($theBook->book->pic_link);
-                        $img = url($img[0]);
+                        if ($this->book->checkPending($theBook->book->id)) {
+                            array_push($result->errorMess, $value . ': Sách với barcode này đang trong hàng đợi đơn trước');
+                        } else {
+                            $img = json_decode($theBook->book->pic_link);
+                            $img = url($img[0]);
 
-                        $result->html .= '<tr><td>' . ++$i . '</td>' .
-
-                            '<td>' . $theBook->barcode . '<input type="hidden" name="barcode[]" value="' . $theBook->barcode . '"/></td>' .
-                            '<td>' . $theBook->book->id . '<input type="hidden" name="book_id[]" value="' . $theBook->book->id . '"/></td>' .
-                            '<td><img class="image-book" src="' . $img . '"></td>' .
-                            '<td>' . $theBook->book->name . '</td>' .
-                            '<td>' . $theBook->book->author . '</td>' .
-                            '<td><button type="button" class="btn btn-danger btn-xs" onclick="deleteRow($(this))" title="Xóa sách"><i
+                            $result->html .= '<tr><td>' . ++$i . '</td>' .
+                                '<td>' . $theBook->barcode . '<input type="hidden" name="barcode[]" value="' . $theBook->barcode . '"/></td>' .
+                                '<td>' . $theBook->book->id . '<input type="hidden" name="book_id[]" value="' . $theBook->book->id . '"/></td>' .
+                                '<td><img class="image-book" src="' . $img . '"></td>' .
+                                '<td>' . $theBook->book->name . '</td>' .
+                                '<td>' . $theBook->book->author . '</td>' .
+                                '<td><button type="button" class="btn btn-danger btn-xs" onclick="deleteRow($(this))" title="Xóa sách"><i
                             class="fas fa-trash"></i></button></td></tr>';
+                        }
                     } else {
                         array_push($result->errorMess, $value . ': Sách với barcode này không khả dụng');
                     };
