@@ -197,6 +197,9 @@ class UserController extends Controller
                 return redirect()->back()->withErrors('Không thể xóa người dùng đang có đơn mượn');
             }
 
+            // Xoa comment
+            $this->user->find($id)->comments()->forceDelete();
+
             $this->user->deleteUser($id);
             DB::commit();
             return redirect()->back()->with(['success' => 'Xóa người dùng thành công']);
